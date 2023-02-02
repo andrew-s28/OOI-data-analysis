@@ -1,0 +1,20 @@
+# A Complete Beginners Guide to OOI Data Analysis through Python
+
+## Introduction
+
+Very recently I was brand new to the world of oceanography and relatively new to Python. I found myself having to pull information from many different sources in order to perform analysis on data from the [Ocean Observatories Initiative](https://oceanobservatories.org/) (OOI) [Endurance Array](https://oceanobservatories.org/array/coastal-endurance/). This is, of course, part of the experience of learning to be a researcher, but I believe that the time I spent searching the web for sources would have been much better spent working on the actual science. 
+
+Towards this goal of streamlining the process of learning to analyze OOI data, this guide fills what is hopefully an unmet need - taking a complete beginner to Python and enabling them to install the necessary applications and packages, navigate the various OOI datasets, access the OOI data through Python code, and finally to do some basic analysis and plotting of OOI data. I constructed this guide initially as a resource for undergraduate students whom I advise. Thus, the intended audience for this guide is for people who are new to Python, OOI data, or both. No prior coding experience will be necessary to follow along with this guide - one does not need to even have Python installed on their machine before beginning. That being said, some basic understanding of data types, loops, and functions may be helpful in truly understanding the code within. What this is *not* intended to be is an introduction to Python in general, as I would do such a broad topic no justice. For this purpose, see the wide variety of already available literature, [such as this](https://library.oapen.org/bitstream/id/56d27e73-e92a-4398-8198-239be7aacc93/2020_Book_IntroductionToScientificProgra.pdf).
+
+## What to Expect Within
+
+The material within this guide is organized as follows:
+- In the first section, I cover how to install Python and the necessary packages in order to do oceanographic data analysis on OOI data.
+- In the second section, I give a brief overview of the OOI assets followed by the first attempt to download and plot some data from the OOI Endurance Array.
+- ...
+
+Currently, this guide is in "V0", meaning I am actively developing it and there is likely to be grammatical and spelling errors, poor descriptions, or other forms of rough edges. As long as this message is still here, please keep this in mind. I am of course open to contributions, so feel free to submit an issue or a pull request on the [Github for this project](https://github.com/andrew-s28/OOI-data-analysis). 
+
+## References and Thanks
+
+I draw from many different sources of both direct coding assistance and general inspiration. I first thank [Tom Connolly](https://github.com/tompc35), who not only provided many of the resources and packages that I use in this guide, but also introduced me to oceanography as a whole. I also thank the entire team at the OOI Endurance Array who maintain the infrastructure and ensure access to the data. A specific thanks to [Chris Wingard](https://github.com/cwingard) who provided Python code used to access and download data from the [THREDDS Catalog](https://thredds.dataexplorer.oceanobservatories.org/thredds/catalog/ooigoldcopy/public/catalog.html) during the [2022 OOIFB Northeast Pacific Community Workshop](https://ooifb.org/meetings/northeast-pacific-ooi-community-workshop-2022/) and to [Russell Desiderio](https://github.com/desiderr) for some critical assistance in my personal research using OOI data and for greatly improving my own understanding of OOI data. Finally, I acknowledge that everything herein has likely been done by someone, somewhere, at sometime. The novelty I am adding here is simply bringing it all under one roof. So a hearty thanks to all whose work I am building upon here! I hope to do it justice.
