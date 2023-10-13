@@ -1,3 +1,4 @@
 xarray
 gsw
 matplotlib
+jupyter-book
