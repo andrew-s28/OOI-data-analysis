@@ -3,3 +3,4 @@ gsw
 matplotlib
 jupyter-book
 eccodes
+cfgrib

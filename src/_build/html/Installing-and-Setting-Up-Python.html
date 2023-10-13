@@ -65,7 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'Installing-and-Setting-Up-Python';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Retrieving and Plotting A SST/SSS Time Series From OOI" href="OOI-SSM-Plotting.html" />
+    <link rel="next" title="Retrieving and Plotting A Time Series From OOI" href="OOI-SSM-Plotting.html" />
     <link rel="prev" title="Introduction" href="intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -162,7 +162,7 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Installing Python and Required Packages</a></li>
-<li class="toctree-l1"><a class="reference internal" href="OOI-SSM-Plotting.html">Retrieving and Plotting A SST/SSS Time Series From OOI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OOI-SSM-Plotting.html">Retrieving and Plotting A Time Series From OOI</a></li>
 </ul>
 
     </div>
@@ -360,10 +360,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-anaconda">Installing Anaconda</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-very-brief-introduction-to-python-packages-and-management">A (Very) Brief Introduction to Python Packages and Management</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-required-packages">Installing Required Packages</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wrapping-up-and-testing">Wrapping Up and Testing</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#congratulations-your-python-install-should-be-good-to-go-and-you-are-well-on-your-way-to-do-some-awesome-analysis-on-oceanographic-datasets">Congratulations! Your Python install should be good to go and you are well on your way to do some awesome analysis on oceanographic datasets.</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wrapping-up-and-testing">Wrapping Up and Testing</a></li>
 </ul>
             </nav>
         </div>
@@ -377,7 +374,8 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="installing-python-and-required-packages">
 <h1>Installing Python and Required Packages<a class="headerlink" href="#installing-python-and-required-packages" title="Permalink to this heading">#</a></h1>
-<p>This notebook covers the steps to install a Python distribution (specifically, Anaconda) and the necessary packages in order to perform data analysis on typical oceanographic or atmospheric data, which often comes in a NetCDF format. This is <em>not</em> intended to be an introduction to Python in general, as I would do such a broad topic no favors. For this purpose, see the wide variety of already available literature, <a class="reference external" href="https://library.oapen.org/bitstream/id/56d27e73-e92a-4398-8198-239be7aacc93/2020_Book_IntroductionToScientificProgra.pdf">such as this</a>.</p>
+<p>This notebook covers the steps to install a Python distribution (specifically, Anaconda) and the necessary packages in order to perform data analysis on typical oceanographic or atmospheric data, which often comes in a NetCDF format. All syntax is from a Windows machine, so for Unix systems (macOS included), syntax may vary.</p>
+<p>This is <em>not</em> intended to be an introduction to Python in general, as I would do such a broad topic no favors. For this purpose, see the wide variety of already available literature, <a class="reference external" href="https://library.oapen.org/bitstream/id/56d27e73-e92a-4398-8198-239be7aacc93/2020_Book_IntroductionToScientificProgra.pdf">such as this</a>.</p>
 <section id="contents">
 <h2>Contents:<a class="headerlink" href="#contents" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
@@ -390,8 +388,8 @@ document.write(`
 <section id="installing-anaconda">
 <h2>Installing Anaconda<a class="headerlink" href="#installing-anaconda" title="Permalink to this heading">#</a></h2>
 <p>This is likely the easiest step in the notebook. Simply naviagte to <a class="reference external" href="https://www.anaconda.com/products/distribution">the Anaconda website</a> to download their latest distribution of Python, packaged with everything you will need. Use the default installation settings.</p>
-<p>Once Anaconda is installed, you can check to make sure things worked correctly by opening an “Anaconda Prompt” (found under the “Home” tab in the Anaconda Navigator or by searching directly on your machine). After opening Anaconda, enter the following command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">Python</span>
+<p>Once Anaconda is installed, you can check to make sure things worked correctly by opening “Anaconda Prompt” (a program found under the “Home” tab in the Anaconda Navigator or by searching directly on your machine). After opening Anaconda, enter the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">python</span>
 </pre></div>
 </div>
 <p>This should output:</p>
@@ -401,10 +399,7 @@ document.write(`
 </div>
 <p>This displays your current python version and, if it prints, everything should be running correctly. If there are any errors, you may need to reinstall Anaconda or Python. You can double check it is running by printing your first line of python code, “Hello World”, by entering the following code:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Python then outputs, as could be expected:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Hello World!
+<span class="go">Hello World!</span>
 </pre></div>
 </div>
 <p>Of course, we would not want to write an entire analysis in the command prompt. Instead, we will be using an Integrated Development Environment (IDE), specifically JupyterLab, which is what this very document was written in. The next section will cover the installation of Python packages such as JupyterLab and other data analysis tools.</p>
@@ -415,64 +410,68 @@ document.write(`
 <p>Before installing anything, we should first understand how to <em>manage</em> packages (which is often a bigger hurdle than installing them in the first place). Sometimes packages or Python versions don’t play nice with one another, so keeping things in separate “environments” will allow us to prevent any issues (or at least isolate them if they do pop up!). This may not be important when you are just starting your coding journey, but once you have separate packages for oceanographic analysis, application development, machine learning, and anything else, you will really start to run into problems if they are all fighting each other in your default environment.</p>
 <p>As one last brief aside before getting into things, you will notice the keywords <em>conda</em> and <em>pip</em> pop up a lot from here on out. These are simply package managers which enable and assist us in our valiant efforts towards organization and control. There is much more detail I could go into about these managers, but it is a bit outside the scope of this topic.</p>
 <p>For now, we are just going to set up a fresh environment for your oceanographic data analysis. Feel free to name it whatever you like. We also specify a specific Python version in this step, which is a very important part of package management (some packages only work on specific Python versions, so we will install version 3.9 since I have verified all the packages work with this). You can also install packages in this step, but we will leave that until later.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">env_name</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">env_name</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span>
 </pre></div>
 </div>
 <p>Note that by specifying a Python version, we also install a few basic packages such as pip (another package manager). When prompted if you would like to continue, press <code class="docutils literal notranslate"><span class="pre">y</span></code> and hit enter. If your environment creation was successful, you can run the following lines to activate your new environment.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">conda</span> <span class="n">deactivate</span>
-<span class="o">&gt;</span><span class="n">conda</span> <span class="n">activate</span> <span class="n">env_name</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">conda</span> <span class="n">deactivate</span>
+<span class="o">&gt;</span> <span class="n">conda</span> <span class="n">activate</span> <span class="n">env_name</span>
 </pre></div>
 </div>
 <p>Now, instead of (base) or (default) in the parentheses, you should now see (env_name). Nice job, our environment is successfully created! Make sure you remember to activate your environment (run the last two lines) whenever you go to do oceanographic coding, or you will be left without your packages. Now on to installing packages.</p>
 </section>
 <section id="installing-required-packages">
 <h2>Installing Required Packages<a class="headerlink" href="#installing-required-packages" title="Permalink to this heading">#</a></h2>
-<p>All of the following packages have been verified to work with each other and with Python version 3.9 on my machine. It would probably work fine on newer python versions too, but use at your own risk (create a backup environment before making big changes such as this - done with <code class="docutils literal notranslate"><span class="pre">&gt;conda</span> <span class="pre">create</span> <span class="pre">--clone</span> <span class="pre">env_name_to_clone</span> <span class="pre">--name</span> <span class="pre">new_env_name</span></code>). You can also specify version number of packages when installing if needed, but we will not do so here.</p>
-<p>Before installing the other packages, we will install our IDE, JupyterLab, and Git, a version control and management package that allows installation of packages from Github repos.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">pip</span> <span class="n">install</span> <span class="n">jupyterlab</span>
-<span class="o">&gt;</span><span class="n">conda</span> <span class="n">install</span> <span class="n">git</span>
+<p>First we will install our IDE, JupyterLab:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">jupyterlab</span>
 </pre></div>
 </div>
-<p>Press <code class="docutils literal notranslate"><span class="pre">y</span></code> and enter whenever prompted. Now we can install the rest of our packages. I group them into batches so you can begin to understand what each package is for (documentation is generally good and vast amounts of information on each can be found at the project sites linked here), although this grouping is not required and they could all be installed in a couple lines.</p>
-<p>First, we install some packages used for accessing data on the web: <a class="reference external" href="https://pypi.org/project/requests/">requests</a> (HTTP requesting), <a class="reference external" href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">Beautiful Soup</a> (for scraping HTML on websites), and <a class="reference external" href="https://unidata.github.io/netcdf4-python/">netCDF4</a> (an interface necessary to read netCDF files).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">conda</span> <span class="n">install</span> <span class="n">requests</span> <span class="n">bs4</span> <span class="n">netcdf4</span>
+<p>Enter <code class="docutils literal notranslate"><span class="pre">y</span></code> whenever prompted to install the package and its dependencies. You should see a whole bunch of other packages pop up when you are installing jupyterlab. These are the packages <em>dependencies</em>, i.e., the other packages required for the package we want to work. Dependencies can get messy, fast, and keeping them separate and organized is one of the primary reasons we use environments in the first place.</p>
+<p>Next, we install the rest of our packages. I group them into batches so you can begin to understand what each package is for (documentation is generally good and vast amounts of information on each can be found at the project sites linked here), although this grouping is not required and they could all be installed in a couple lines.</p>
+<p>First, we install some packages used for accessing data on the web: <a class="reference external" href="https://pypi.org/project/requests/">requests</a> (HTTP requesting), <a class="reference external" href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">Beautiful Soup</a> (for scraping HTML on websites), and <a class="reference external" href="https://unidata.github.io/netcdf4-python/">netCDF4</a> (an interface necessary to read netCDF files):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">conda</span> <span class="n">install</span> <span class="n">requests</span> <span class="n">bs4</span> <span class="n">netcdf4</span>
 </pre></div>
 </div>
-<p>You should see a whole bunch of other packages pop up when you go to install these. This is normal. These are the packages <em>dependencies</em>, i.e., the other packages required for the package we want to work. Dependencies can get messy, fast, and keeping them separate and organized is one of the primary reasons we use environments in the first place.</p>
-<p>Next, we will install basic scientific computation resources like <a class="reference external" href="https://numpy.org/">Numpy</a> (working with arrays), <a class="reference external" href="https://scipy.org/">Scipy</a> (interpolation, linear algebra, numerical integration), <a class="reference external" href="https://pandas.pydata.org/">Pandas</a> (data structures for working with tables, works well with xarray), <a class="reference external" href="https://docs.xarray.dev/en/stable/">Xarray</a> (designed for handling multi-dimensional arrays and NetCDF files, the dominant file type for oceanographic data), and <a class="reference external" href="https://matplotlib.org/">Matplotlib</a> (plotting).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">pip</span> <span class="n">install</span> <span class="n">pandas</span> <span class="n">matplotlib</span> <span class="n">numpy</span> <span class="n">xarray</span> <span class="n">scipy</span>
+<p>Next, we will install basic scientific computation resources like <a class="reference external" href="https://numpy.org/">Numpy</a> (working with arrays), <a class="reference external" href="https://scipy.org/">Scipy</a> (interpolation, linear algebra, numerical integration), <a class="reference external" href="https://pandas.pydata.org/">Pandas</a> (data structures for working with tables, works well with xarray), <a class="reference external" href="https://docs.xarray.dev/en/stable/">Xarray</a> (designed for handling multi-dimensional arrays and NetCDF files, the dominant file type for oceanographic data), and <a class="reference external" href="https://matplotlib.org/">Matplotlib</a> (plotting):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pandas</span> <span class="n">matplotlib</span> <span class="n">numpy</span> <span class="n">xarray</span><span class="p">[</span><span class="n">io</span><span class="p">]</span> <span class="n">scipy</span>
 </pre></div>
 </div>
-<p>Finally, we install some oceanographic-specific packages to help with some calculations, analysis, and presentation: <a class="reference external" href="https://github.com/pyoceans/python-airsea">airsea</a> (calculates wind stress), <a class="reference external" href="https://github.com/physoce/physoce-py">physoce</a> (useful statistics and some wave stuff), <a class="reference external" href="https://matplotlib.org/cmocean/">cmocean</a> (colorways for plotting oceanographic data), and <a class="reference external" href="https://teos-10.github.io/GSW-Python/">GSW</a> (TEOS-10 Gibbs Sea Water - equations of state for seawater).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">pip</span> <span class="n">install</span> <span class="n">cmocean</span> <span class="n">gsw</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">physoce</span><span class="o">/</span><span class="n">physoce</span><span class="o">-</span><span class="n">py</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">pyoceans</span><span class="o">/</span><span class="n">python</span><span class="o">-</span><span class="n">airsea</span><span class="o">.</span><span class="n">git</span>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Note that copying all of your book’s build files into the same branch as your source files will cause your repository to become very large over time, especially if you have many images in your book. :::</p>
+<p>Note the optional [io] specifier, which installs xarray with its optional io packages and their dependencies. If you don’t include this, you’ll get an error message when you try to open netCDF files. See <a class="reference external" href="https://docs.xarray.dev/en/stable/getting-started-guide/installing.html#instructions">here</a> for more details. You may also be interested in installing the optional visualization or acceleration package dependencies for xarray, as well as the eccodes package which allows reading of <a class="reference external" href="https://confluence.ecmwf.int/display/CKB/What+are+GRIB+files+and+how+can+I+read+them">GRIB files</a>, which can be installed with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">xarray</span><span class="p">[</span><span class="n">viz</span><span class="p">]</span> <span class="n">xarray</span><span class="p">[</span><span class="n">accel</span><span class="p">]</span> <span class="n">eccodes</span>
 </pre></div>
 </div>
-<p>Note the last two installed packages use links to their respective github repositories, since they are most up to date there.</p>
+<p>Finally, we install some oceanographic-specific packages to help with some calculations, analysis, and presentation: <a class="reference external" href="https://pypi.org/project/pycoare/">pycoare</a> (calculates wind stress among other things), <a class="reference external" href="https://matplotlib.org/cmocean/">cmocean</a> (colormaps for plotting oceanographic data), and <a class="reference external" href="https://teos-10.github.io/GSW-Python/">GSW</a> (TEOS-10 Gibbs Sea Water - equation of state):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">cmocean</span> <span class="n">gsw</span> <span class="n">pycoare</span>
+</pre></div>
+</div>
+<p>There are, of course, plenty more packages designed for oceanographic data analysis, many of which can be found at <a class="reference external" href="https://pyoceans.github.io/sea-py/">SEA-PY</a>.</p>
+</div>
 </section>
 <section id="wrapping-up-and-testing">
 <h2>Wrapping Up and Testing<a class="headerlink" href="#wrapping-up-and-testing" title="Permalink to this heading">#</a></h2>
-<p>You should now be able to open an Anaconda Prompt, activate your new environment with</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">conda</span> <span class="n">deactivate</span>
-<span class="o">&gt;</span><span class="n">conda</span> <span class="n">activate</span> <span class="n">env_name</span>
+<p>You should now be able to open an Anaconda Prompt, activate your new environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">conda</span> <span class="n">deactivate</span>
+<span class="o">&gt;</span> <span class="n">conda</span> <span class="n">activate</span> <span class="n">env_name</span>
 </pre></div>
 </div>
-<p>navigate to the directory of your soon-to-be project with</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">cd</span> <span class="n">C</span><span class="p">:</span>\<span class="n">your_path_here</span>
+<p>Create a folder on your desktop titled <code class="docutils literal notranslate"><span class="pre">OOI_data_analysis</span></code> and navigate to the directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">cd</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">your_username_here</span>\<span class="n">Desktop</span>\<span class="n">OOI_data_analysis</span>
 </pre></div>
 </div>
-<p>then run your Jupyter Lab IDE with</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">jupyter</span> <span class="n">lab</span>
+<p>Start the Jupyter Lab IDE:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">jupyter</span> <span class="n">lab</span>
 </pre></div>
 </div>
-<p>You should now see a browser open with the Jupyter Lab IDE and all the packages ready to go. However, we’re not quite done yet. To actually use our installed packages, we have to import them into each project. Open a new notebook and, in the first cell, paste the code:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span><span class="o">,</span> <span class="nn">bs4</span><span class="o">,</span> <span class="nn">numpy</span><span class="o">,</span> <span class="nn">scipy</span><span class="o">,</span> <span class="nn">pandas</span><span class="o">,</span> <span class="nn">xarray</span><span class="o">,</span> <span class="nn">matplotlib</span><span class="o">,</span> <span class="nn">airsea</span><span class="o">,</span> <span class="nn">physoce</span><span class="o">,</span> <span class="nn">cmocean</span><span class="o">,</span> <span class="nn">gsw</span>
+<p>You should now see a browser open with the Jupyter Lab IDE and all the packages ready to go. However, we’re not quite done yet. To actually use our installed packages, we have to import them into each project. Open a new notebook and, in the first cell, paste and run the code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span><span class="o">,</span> <span class="nn">bs4</span><span class="o">,</span> <span class="nn">numpy</span><span class="o">,</span> <span class="nn">scipy</span><span class="o">,</span> <span class="nn">pandas</span><span class="o">,</span> <span class="nn">xarray</span><span class="o">,</span> <span class="nn">matplotlib</span><span class="o">,</span> <span class="nn">pycoare</span><span class="o">,</span> <span class="nn">cmocean</span><span class="o">,</span> <span class="nn">gsw</span>
 </pre></div>
 </div>
 <p>If this runs without error, you are good to go! Do be aware that the way I showed you above is generally <em>not</em> how you want to import packages, since this installs all of the modules within the package. Instead, to keep code efficient, try your best to import only the modules you will need (e.g., <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">matplotlib.pyplot</span></code> only imports the pyplot module from the package matplotlib. You can also rename at this step (e.g., numpy is traditionally imported as <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">numpy</span> <span class="pre">as</span> <span class="pre">np</span></code>), but all these details are beyond this introduction.</p>
 <p>If your import does not run, you’re one of the lucky ones who will get a hands-on experience diagnosing and fixing a bug - a valuable skill! Read the error code and identify the problem package. It may need reinstalled, or you may have used an incompatible Python version, or maybe there is a problem specific to your machine or Python install.</p>
-<section id="congratulations-your-python-install-should-be-good-to-go-and-you-are-well-on-your-way-to-do-some-awesome-analysis-on-oceanographic-datasets">
-<h3>Congratulations! Your Python install should be good to go and you are well on your way to do some awesome analysis on oceanographic datasets.<a class="headerlink" href="#congratulations-your-python-install-should-be-good-to-go-and-you-are-well-on-your-way-to-do-some-awesome-analysis-on-oceanographic-datasets" title="Permalink to this heading">#</a></h3>
-</section>
+<p>Check out the <a class="reference internal" href="OOI-SSM-Plotting.html"><span class="doc std std-doc">next part of this guide</span></a> to put your new packages to use by analyzing some OOI data.</p>
 </section>
 </section>
 
@@ -520,7 +519,7 @@ document.write(`
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Retrieving and Plotting A SST/SSS Time Series From OOI</p>
+        <p class="prev-next-title">Retrieving and Plotting A Time Series From OOI</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -543,10 +542,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-anaconda">Installing Anaconda</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-very-brief-introduction-to-python-packages-and-management">A (Very) Brief Introduction to Python Packages and Management</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-required-packages">Installing Required Packages</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wrapping-up-and-testing">Wrapping Up and Testing</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#congratulations-your-python-install-should-be-good-to-go-and-you-are-well-on-your-way-to-do-some-awesome-analysis-on-oceanographic-datasets">Congratulations! Your Python install should be good to go and you are well on your way to do some awesome analysis on oceanographic datasets.</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wrapping-up-and-testing">Wrapping Up and Testing</a></li>
 </ul>
   </nav></div>
 
