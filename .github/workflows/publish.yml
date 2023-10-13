@@ -26,6 +26,7 @@ jobs:
       run: |
         pip install -r src/requirements.txt
         conda install -c conda-forge eccodes
+        python -m eccodes selfcheck
 
     # Build the book
     - name: Build the book
