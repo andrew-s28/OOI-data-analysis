@@ -4,5 +4,5 @@
 format: jb-book
 root: intro
 chapters:
-- file: Installing-and-Setting-Up-Python
-- file: OOI-SSM-Plotting
+  - file: Installing-and-Setting-Up-Python
+  - file: OOI-SSM-Plotting
