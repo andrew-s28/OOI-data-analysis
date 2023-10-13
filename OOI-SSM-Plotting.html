@@ -1,0 +1,1098 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Retrieving and Plotting A SST/SSS Time Series From OOI &#8212; OOI Data Analysis for the Python Beginner</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'OOI-SSM-Plotting';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Installing Python and Required Packages" href="Installing-and-Setting-Up-Python.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">OOI Data Analysis for the Python Beginner</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    A Guide to Ocean Observatories Initiative Data Analysis for a Python Beginner
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Installing-and-Setting-Up-Python.html">Installing Python and Required Packages</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Retrieving and Plotting A SST/SSS Time Series From OOI</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/andrew-s28/OOI-data-analysis" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/andrew-s28/OOI-data-analysis/issues/new?title=Issue%20on%20page%20%2FOOI-SSM-Plotting.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/OOI-SSM-Plotting.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Retrieving and Plotting A SST/SSS Time Series From OOI</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contents">Contents:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accessing-ooi-data">Accessing OOI Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analyzing-ooi-data">Analyzing OOI Data</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="retrieving-and-plotting-a-sst-sss-time-series-from-ooi">
+<h1>Retrieving and Plotting A SST/SSS Time Series From OOI<a class="headerlink" href="#retrieving-and-plotting-a-sst-sss-time-series-from-ooi" title="Permalink to this heading">#</a></h1>
+<p>This guide assumes that you have a working Python install with the JupyterLab IDE and all packages installed from <a class="reference internal" href="Installing-and-Setting-Up-Python.html"><span class="doc std std-doc">the first part of this guide</span></a>.</p>
+<section id="contents">
+<h2>Contents:<a class="headerlink" href="#contents" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><span class="xref myst">Introduction</span></p></li>
+<li><p><span class="xref myst">Accessing OOI Data</span></p></li>
+<li><p><span class="xref myst">Analyzing OOI Data</span></p></li>
+</ul>
+</section>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p>This notebook is intended to cover the basics of working with <a class="reference external" href="https://oceanobservatories.org/array/coastal-endurance/">Ocean Observatories Initative (OOI) Endurance Array</a> oceanographic data <a class="reference external" href="https://thredds.dataexplorer.oceanobservatories.org/thredds/catalog/ooigoldcopy/public/catalog.html">retrieved from their THREDDS server</a>. OOI “is a science-driven ocean observing network that delivers real-time data from more than 800 instruments to address critical science questions regarding the world’s oceans.” They manage oceanic instrumentation throughout the world, but the array we are interested in, the Endurance Array, is an installation on the continental shelf of the Northeast Pacific Ocean.</p>
+<p>The moorings within the Endurance Array are made up of two sets of similar moorings on the Oregon and Washington coasts with three sites across the shelf - the shelf slope (500m-600m), the shelf (80m-90m), and the inner-shelf (25m-30m). This guide will focus on the latter. Each mooring consists of sea surface moorings (SSM) with sensors such as conductivity, temperature, and depth (CTD) meters and anemometers for wind velocity (<a class="reference external" href="https://ooi-website.whoi.edu/instruments/">click here for a full list of OOI sensors</a>). In addition, OOI includes surface piercing profilers (SPP) which move throughout the water column on regular intervals and record the same oceanographic data that is taken at the surface mooring.</p>
+<p>The SSM data is what we will be analyzing today. We will be analyzing sea surface temperature and salinity (SST/SSS) time series from the inner-shelf site, although the techniques can be similarly applied to both the shelf and the shelf slope.</p>
+</section>
+<section id="accessing-ooi-data">
+<h2>Accessing OOI Data<a class="headerlink" href="#accessing-ooi-data" title="Permalink to this heading">#</a></h2>
+<p>OOI includes a <a class="reference external" href="https://dataexplorer.oceanobservatories.org/#ooi/array/CE?search=">data explorer</a> that can be very helpful for getting a feel for the data. However, we want to do some analysis that will require downloading the data into Python, so we will instead access it through OOI’s API. First, import xarray, which we will use to both load and work with the dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The next step is to construct a URL that brings us to the data catalog for the instrument we want. Every instrument in the Endurance Array uses the same “base” URL. “Reference designators” appended to the base URL will bring us to the data from the instrument we want. I won’t go into detail here, but a full explanation of reference designators for OOI <a class="reference external" href="https://oceanobservatories.org/knowledgebase/how-to-decipher-a-reference-designator/">can be found here</a>.</p>
+<p>For now, I will just provide the necessary reference designator for the sea surface mooring conductivity, temperature, and depth unit (or SSM CTD - remember those acronyms?) which will provide the temperature and salinity data used in this analysis.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_url</span> <span class="o">=</span> <span class="s1">&#39;https://thredds.dataexplorer.oceanobservatories.org/thredds/catalog/ooigoldcopy/public/&#39;</span>
+
+<span class="n">site</span> <span class="o">=</span> <span class="s1">&#39;CE01ISSM&#39;</span>
+<span class="n">node</span> <span class="o">=</span> <span class="s1">&#39;RID16&#39;</span>
+<span class="n">port</span> <span class="o">=</span> <span class="s1">&#39;03&#39;</span>
+<span class="n">instrument</span> <span class="o">=</span> <span class="s1">&#39;CTDBPC000&#39;</span>
+<span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;recovered_host&#39;</span>
+<span class="n">stream</span> <span class="o">=</span> <span class="s1">&#39;ctdbp_cdef_dcl_instrument_recovered&#39;</span>
+<span class="c1">#combine into a complete reference designator</span>
+<span class="n">ref_des</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">site</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">instrument</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">stream</span><span class="p">])</span>
+
+<span class="c1">#append to URL, including /catalog.html on the end</span>
+<span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">ref_des</span> <span class="o">+</span> <span class="s1">&#39;/catalog.html&#39;</span>
+<span class="n">url</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;https://thredds.dataexplorer.oceanobservatories.org/thredds/catalog/ooigoldcopy/public/CE01ISSM-RID16-03-CTDBPC000-recovered_host-ctdbp_cdef_dcl_instrument_recovered/catalog.html&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Clicking the link output by the previous code will brings us to the catalog of data from the specified instrument. Next, we need to pick a deployment (i.e., a timeframe), which is somewhat arbitrary here but in general is guided by science questions and data availability.</p>
+<p>I happen to know that 2019 has a good SST/SSS dataset, so I will scroll down to find the <code class="docutils literal notranslate"><span class="pre">.nc</span></code> file that covers the 2019 deployment (found simply by reading the dates in the catalog URLs). We only want to look for <code class="docutils literal notranslate"><span class="pre">.nc</span></code> files here since that file type is exactly what xarray is designed to handle. Click on the URL associated with deployment 11 (~April-October 2019), access through OPENDAP, and copy the data URL shown. We now are ready to load this into an xarray!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ctd_ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;http://thredds.dataexplorer.oceanobservatories.org/thredds/dodsC/ooigoldcopy/public/CE01ISSM-RID16-03-CTDBPC000-recovered_host-ctdbp_cdef_dcl_instrument_recovered/deployment0011_CE01ISSM-RID16-03-CTDBPC000-recovered_host-ctdbp_cdef_dcl_instrument_recovered_20190420T033109.483000-20191022T233015.690000.nc&#39;</span><span class="p">)</span>
+<span class="n">ctd_ds</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">ctd_ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;http://thredds.dataexplorer.oceanobservatories.org/thredds/dodsC/ooigoldcopy/public/CE01ISSM-RID16-03-CTDBPC000-recovered_host-ctdbp_cdef_dcl_instrument_recovered/deployment0011_CE01ISSM-RID16-03-CTDBPC000-recovered_host-ctdbp_cdef_dcl_instrument_recovered_20190420T033109.483000-20191022T233015.690000.nc&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">ctd_ds</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/xarray/backends/api.py:279,</span> in <span class="ni">load_dataset</span><span class="nt">(filename_or_obj, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">276</span> <span class="k">if</span> <span class="s2">&quot;cache&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">277</span>     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;cache has no effect in this context&quot;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">279</span> <span class="k">with</span> <span class="n">open_dataset</span><span class="p">(</span><span class="n">filename_or_obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="k">as</span> <span class="n">ds</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">280</span>     <span class="k">return</span> <span class="n">ds</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/xarray/backends/api.py:525,</span> in <span class="ni">open_dataset</span><span class="nt">(filename_or_obj, engine, chunks, cache, decode_cf, mask_and_scale, decode_times, decode_timedelta, use_cftime, concat_characters, decode_coords, drop_variables, inline_array, backend_kwargs, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">522</span>     <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">backend_kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">524</span> <span class="k">if</span> <span class="n">engine</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">525</span>     <span class="n">engine</span> <span class="o">=</span> <span class="n">plugins</span><span class="o">.</span><span class="n">guess_engine</span><span class="p">(</span><span class="n">filename_or_obj</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">527</span> <span class="n">backend</span> <span class="o">=</span> <span class="n">plugins</span><span class="o">.</span><span class="n">get_backend</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">529</span> <span class="n">decoders</span> <span class="o">=</span> <span class="n">_resolve_decoders_kwargs</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">530</span>     <span class="n">decode_cf</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">531</span>     <span class="n">open_backend_dataset_parameters</span><span class="o">=</span><span class="n">backend</span><span class="o">.</span><span class="n">open_dataset_parameters</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">537</span>     <span class="n">decode_coords</span><span class="o">=</span><span class="n">decode_coords</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">538</span> <span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/xarray/backends/plugins.py:177,</span> in <span class="ni">guess_engine</span><span class="nt">(store_spec)</span>
+<span class="g g-Whitespace">    </span><span class="mi">169</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">170</span>     <span class="n">error_msg</span> <span class="o">=</span> <span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">171</span>         <span class="s2">&quot;found the following matches with the input file in xarray&#39;s IO &quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">172</span>         <span class="sa">f</span><span class="s2">&quot;backends: </span><span class="si">{</span><span class="n">compatible_engines</span><span class="si">}</span><span class="s2">. But their dependencies may not be installed, see:</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">173</span>         <span class="s2">&quot;https://docs.xarray.dev/en/stable/user-guide/io.html </span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">174</span>         <span class="s2">&quot;https://docs.xarray.dev/en/stable/getting-started-guide/installing.html&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">175</span>     <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">177</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
+
+<span class="ne">ValueError</span>: found the following matches with the input file in xarray&#39;s IO backends: [&#39;netcdf4&#39;, &#39;h5netcdf&#39;, &#39;pydap&#39;, &#39;scipy&#39;]. But their dependencies may not be installed, see:
+<span class="ne">https</span>://docs.xarray.dev/en/stable/user-guide/io.html 
+<span class="ne">https</span>://docs.xarray.dev/en/stable/getting-started-guide/installing.html
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, it’s time to do some stuff with this data!</p>
+</section>
+<section id="analyzing-ooi-data">
+<h2>Analyzing OOI Data<a class="headerlink" href="#analyzing-ooi-data" title="Permalink to this heading">#</a></h2>
+<p>Take a moment to understand the organization of the xarray from the last section before proceding. Notice that it is organized, quite naturally, around “dimensions”, “coordinates”, and “data variables”. This structure simplifies the understanding of complex, multidimensional data and is the true power of the NetCDF format.</p>
+<p>Dimensions (bolded coordinates) define the <em>shape</em> of the dataset. Every other coordinate and data variable must have the same length as its associated dimensions (notice the ‘s’ - we can have more than one dimension per variable). The dimensions of another variable are shown in the parentheses after the variable name. Other coordinates define spatial and temporal locations of data variables but do not define the shape of the dataset itself. Data variables consist of everything else the dataset contains. Make sure you check the units of your downloaded data, which can also be easily viewed in a NetCDF file.</p>
+<p>OOI SSM data from the Endurance Array ships with all data variables and coordinates a function of the dimension <code class="docutils literal notranslate"><span class="pre">obs</span></code>, short for observation. This provides a simple counting of each time the sensor is sampling. However, it is not very useful from a data analysis perspective. Instead, we would the primary dimension be time, so our first task is to switch the dimension of the array.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ctd_ds</span> <span class="o">=</span> <span class="n">ctd_ds</span><span class="o">.</span><span class="n">swap_dims</span><span class="p">({</span><span class="s1">&#39;obs&#39;</span><span class="p">:</span><span class="s1">&#39;time&#39;</span><span class="p">})</span>
+<span class="n">ctd_ds</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
+<defs>
+<symbol id="icon-database" viewBox="0 0 32 32">
+<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
+<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+</symbol>
+<symbol id="icon-file-text2" viewBox="0 0 32 32">
+<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
+<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+</symbol>
+</defs>
+</svg>
+<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
+ *
+ */
+
+:root {
+  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
+  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
+  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
+  --xr-border-color: var(--jp-border-color2, #e0e0e0);
+  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
+  --xr-background-color: var(--jp-layout-color0, white);
+  --xr-background-color-row-even: var(--jp-layout-color1, white);
+  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
+}
+
+html[theme=dark],
+body.vscode-dark {
+  --xr-font-color0: rgba(255, 255, 255, 1);
+  --xr-font-color2: rgba(255, 255, 255, 0.54);
+  --xr-font-color3: rgba(255, 255, 255, 0.38);
+  --xr-border-color: #1F1F1F;
+  --xr-disabled-color: #515151;
+  --xr-background-color: #111111;
+  --xr-background-color-row-even: #111111;
+  --xr-background-color-row-odd: #313131;
+}
+
+.xr-wrap {
+  display: block !important;
+  min-width: 300px;
+  max-width: 700px;
+}
+
+.xr-text-repr-fallback {
+  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
+  display: none;
+}
+
+.xr-header {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  border-bottom: solid 1px var(--xr-border-color);
+}
+
+.xr-header > div,
+.xr-header > ul {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.xr-obj-type,
+.xr-array-name {
+  margin-left: 2px;
+  margin-right: 10px;
+}
+
+.xr-obj-type {
+  color: var(--xr-font-color2);
+}
+
+.xr-sections {
+  padding-left: 0 !important;
+  display: grid;
+  grid-template-columns: 150px auto auto 1fr 20px 20px;
+}
+
+.xr-section-item {
+  display: contents;
+}
+
+.xr-section-item input {
+  display: none;
+}
+
+.xr-section-item input + label {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-item input:enabled + label {
+  cursor: pointer;
+  color: var(--xr-font-color2);
+}
+
+.xr-section-item input:enabled + label:hover {
+  color: var(--xr-font-color0);
+}
+
+.xr-section-summary {
+  grid-column: 1;
+  color: var(--xr-font-color2);
+  font-weight: 500;
+}
+
+.xr-section-summary > span {
+  display: inline-block;
+  padding-left: 0.5em;
+}
+
+.xr-section-summary-in:disabled + label {
+  color: var(--xr-font-color2);
+}
+
+.xr-section-summary-in + label:before {
+  display: inline-block;
+  content: '►';
+  font-size: 11px;
+  width: 15px;
+  text-align: center;
+}
+
+.xr-section-summary-in:disabled + label:before {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-summary-in:checked + label:before {
+  content: '▼';
+}
+
+.xr-section-summary-in:checked + label > span {
+  display: none;
+}
+
+.xr-section-summary,
+.xr-section-inline-details {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.xr-section-inline-details {
+  grid-column: 2 / -1;
+}
+
+.xr-section-details {
+  display: none;
+  grid-column: 1 / -1;
+  margin-bottom: 5px;
+}
+
+.xr-section-summary-in:checked ~ .xr-section-details {
+  display: contents;
+}
+
+.xr-array-wrap {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 20px auto;
+}
+
+.xr-array-wrap > label {
+  grid-column: 1;
+  vertical-align: top;
+}
+
+.xr-preview {
+  color: var(--xr-font-color3);
+}
+
+.xr-array-preview,
+.xr-array-data {
+  padding: 0 5px !important;
+  grid-column: 2;
+}
+
+.xr-array-data,
+.xr-array-in:checked ~ .xr-array-preview {
+  display: none;
+}
+
+.xr-array-in:checked ~ .xr-array-data,
+.xr-array-preview {
+  display: inline-block;
+}
+
+.xr-dim-list {
+  display: inline-block !important;
+  list-style: none;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.xr-dim-list li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.xr-dim-list:before {
+  content: '(';
+}
+
+.xr-dim-list:after {
+  content: ')';
+}
+
+.xr-dim-list li:not(:last-child):after {
+  content: ',';
+  padding-right: 5px;
+}
+
+.xr-has-index {
+  font-weight: bold;
+}
+
+.xr-var-list,
+.xr-var-item {
+  display: contents;
+}
+
+.xr-var-item > div,
+.xr-var-item label,
+.xr-var-item > .xr-var-name span {
+  background-color: var(--xr-background-color-row-even);
+  margin-bottom: 0;
+}
+
+.xr-var-item > .xr-var-name:hover span {
+  padding-right: 5px;
+}
+
+.xr-var-list > li:nth-child(odd) > div,
+.xr-var-list > li:nth-child(odd) > label,
+.xr-var-list > li:nth-child(odd) > .xr-var-name span {
+  background-color: var(--xr-background-color-row-odd);
+}
+
+.xr-var-name {
+  grid-column: 1;
+}
+
+.xr-var-dims {
+  grid-column: 2;
+}
+
+.xr-var-dtype {
+  grid-column: 3;
+  text-align: right;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-preview {
+  grid-column: 4;
+}
+
+.xr-var-name,
+.xr-var-dims,
+.xr-var-dtype,
+.xr-preview,
+.xr-attrs dt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
+
+.xr-var-name:hover,
+.xr-var-dims:hover,
+.xr-var-dtype:hover,
+.xr-attrs dt:hover {
+  overflow: visible;
+  width: auto;
+  z-index: 1;
+}
+
+.xr-var-attrs,
+.xr-var-data {
+  display: none;
+  background-color: var(--xr-background-color) !important;
+  padding-bottom: 5px !important;
+}
+
+.xr-var-attrs-in:checked ~ .xr-var-attrs,
+.xr-var-data-in:checked ~ .xr-var-data {
+  display: block;
+}
+
+.xr-var-data > table {
+  float: right;
+}
+
+.xr-var-name span,
+.xr-var-data,
+.xr-attrs {
+  padding-left: 25px !important;
+}
+
+.xr-attrs,
+.xr-var-attrs,
+.xr-var-data {
+  grid-column: 1 / -1;
+}
+
+dl.xr-attrs {
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 125px auto;
+}
+
+.xr-attrs dt,
+.xr-attrs dd {
+  padding: 0;
+  margin: 0;
+  float: left;
+  padding-right: 10px;
+  width: auto;
+}
+
+.xr-attrs dt {
+  font-weight: normal;
+  grid-column: 1;
+}
+
+.xr-attrs dt:hover span {
+  display: inline-block;
+  background: var(--xr-background-color);
+  padding-right: 10px;
+}
+
+.xr-attrs dd {
+  grid-column: 2;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.xr-icon-database,
+.xr-icon-file-text2 {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1.5em !important;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+</style><pre class='xr-text-repr-fallback'>&lt;xarray.Dataset&gt;
+Dimensions:                                            (time: 2224)
+Coordinates:
+    obs                                                (time) int32 0 1 ... 2223
+  * time                                               (time) datetime64[ns] ...
+Data variables: (12/34)
+    sea_water_pressure_qc_results                      (time) float32 13.0 .....
+    sea_water_pressure                                 (time) float32 7.328 ....
+    dcl_controller_timestamp                           (time) object b&#x27;empty&#x27;...
+    sea_water_electrical_conductivity_qartod_results   (time) float32 1.0 ......
+    sea_water_pressure_qc_executed                     (time) float32 29.0 .....
+    sea_water_practical_salinity_qc_executed           (time) float32 29.0 .....
+    ...                                                 ...
+    sea_water_density                                  (time) float64 1.023e+...
+    depth                                              (time) float64 7.269 ....
+    sea_water_pressure_qartod_results                  (time) float32 1.0 ......
+    sea_water_electrical_conductivity_qartod_executed  (time) |S64 b&#x27;1&#x27; ... b&#x27;1&#x27;
+    sea_water_electrical_conductivity                  (time) float32 3.516 ....
+    sea_water_practical_salinity_qartod_executed       (time) |S64 b&#x27;11&#x27; ... ...
+Attributes: (12/73)
+    node:                               RID16
+    comment:                            
+    publisher_email:                    
+    sourceUrl:                          http://oceanobservatories.org/
+    collection_method:                  recovered_host
+    stream:                             ctdbp_cdef_dcl_instrument_recovered
+    ...                                 ...
+    geospatial_vertical_positive:       down
+    lat:                                44.65683
+    lon:                                -124.09533
+    DODS.strlen:                        14
+    DODS.dimName:                       string14
+    DODS_EXTRA.Unlimited_Dimension:     obs</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.Dataset</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-11729db6-c979-4454-88c3-d2fc7bf2caa1' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-11729db6-c979-4454-88c3-d2fc7bf2caa1' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>time</span>: 2224</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-ff6326f6-4044-4fe3-94d3-3123d1dd9b17' class='xr-section-summary-in' type='checkbox'  checked><label for='section-ff6326f6-4044-4fe3-94d3-3123d1dd9b17' class='xr-section-summary' >Coordinates: <span>(2)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>obs</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>int32</div><div class='xr-var-preview xr-preview'>0 1 2 3 4 ... 2220 2221 2222 2223</div><input id='attrs-a0172665-05a8-45db-8dab-1669dc0a1f4e' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-a0172665-05a8-45db-8dab-1669dc0a1f4e' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-afaa8b00-4805-4eb5-9e3f-6e692657abf5' class='xr-var-data-in' type='checkbox'><label for='data-afaa8b00-4805-4eb5-9e3f-6e692657abf5' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_ChunkSizes :</span></dt><dd>1024</dd></dl></div><div class='xr-var-data'><pre>array([   0,    1,    2, ..., 2221, 2222, 2223])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>time</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>datetime64[ns]</div><div class='xr-var-preview xr-preview'>2019-04-20T03:31:09.482999808 .....</div><input id='attrs-3e6c288e-4630-4ab7-b795-45f5049fd761' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-3e6c288e-4630-4ab7-b795-45f5049fd761' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-d0ea2205-64f1-4574-9477-3064cb2e4c9d' class='xr-var-data-in' type='checkbox'><label for='data-d0ea2205-64f1-4574-9477-3064cb2e4c9d' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>time</dd><dt><span>standard_name :</span></dt><dd>time</dd><dt><span>axis :</span></dt><dd>T</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([&#x27;2019-04-20T03:31:09.482999808&#x27;, &#x27;2019-04-20T04:31:11.066999808&#x27;,
+       &#x27;2019-04-20T06:30:07.310000128&#x27;, ..., &#x27;2019-10-22T20:30:15.685000192&#x27;,
+       &#x27;2019-10-22T22:30:15.688999936&#x27;, &#x27;2019-10-22T23:30:15.689999872&#x27;],
+      dtype=&#x27;datetime64[ns]&#x27;)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-30ff7d67-b41c-4d48-8d0c-224f8d7207df' class='xr-section-summary-in' type='checkbox'  ><label for='section-30ff7d67-b41c-4d48-8d0c-224f8d7207df' class='xr-section-summary' >Data variables: <span>(34)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_pressure_qc_results</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>13.0 13.0 13.0 ... 13.0 13.0 13.0</div><input id='attrs-e10683d8-5612-4973-8d4f-f37a8c3de750' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-e10683d8-5612-4973-8d4f-f37a8c3de750' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-125d40d9-a76b-48de-bd18-3d93cebc9bed' class='xr-var-data-in' type='checkbox'><label for='data-125d40d9-a76b-48de-bd18-3d93cebc9bed' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>alternate_parameter_name :</span></dt><dd>pressure_qc_results</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([13., 13., 13., ..., 13., 13., 13.], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_pressure</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>7.328 7.163 7.335 ... 7.502 7.734</div><input id='attrs-e7292dba-2c44-47e7-bdde-3b64e4990ced' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-e7292dba-2c44-47e7-bdde-3b64e4990ced' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-2f6d5e35-9ba6-47ce-91f1-624a9327a47b' class='xr-var-data-in' type='checkbox'><label for='data-2f6d5e35-9ba6-47ce-91f1-624a9327a47b' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>comment :</span></dt><dd>Seawater Pressure refers to the pressure exerted on a sensor in situ by the weight of the column of seawater above it. It is calculated by subtracting one standard atmosphere from the absolute pressure at the sensor to remove the weight of the atmosphere on top of the water column. The pressure at a sensor in situ provides a metric of the depth of that sensor.</dd><dt><span>long_name :</span></dt><dd>Seawater Pressure</dd><dt><span>precision :</span></dt><dd>3</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>data_product_identifier :</span></dt><dd>PRESWAT_L1</dd><dt><span>standard_name :</span></dt><dd>sea_water_pressure</dd><dt><span>units :</span></dt><dd>dbar</dd><dt><span>ancillary_variables :</span></dt><dd>pressure_qartod_results pressure_qartod_executed</dd><dt><span>alternate_parameter_name :</span></dt><dd>pressure</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([7.328, 7.163, 7.335, ..., 7.527, 7.502, 7.734], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>dcl_controller_timestamp</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>object</div><div class='xr-var-preview xr-preview'>b&#x27;empty&#x27; b&#x27;empty&#x27; ... b&#x27;empty&#x27;</div><input id='attrs-96e8d099-ce5a-4580-b2ca-18b6784df5bf' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-96e8d099-ce5a-4580-b2ca-18b6784df5bf' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-4d36740e-5aab-4e53-967f-0aea94d76c4b' class='xr-var-data-in' type='checkbox'><label for='data-4d36740e-5aab-4e53-967f-0aea94d76c4b' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>precision :</span></dt><dd>0</dd><dt><span>long_name :</span></dt><dd>DCL Controller Timestamp</dd><dt><span>comment :</span></dt><dd>Timestamp from the DCL controller</dd><dt><span>_ChunkSizes :</span></dt><dd>[2224    5]</dd></dl></div><div class='xr-var-data'><pre>array([b&#x27;empty&#x27;, b&#x27;empty&#x27;, b&#x27;empty&#x27;, ..., b&#x27;empty&#x27;, b&#x27;empty&#x27;, b&#x27;empty&#x27;],
+      dtype=object)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_electrical_conductivity_qartod_results</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>1.0 1.0 1.0 1.0 ... 1.0 1.0 1.0 1.0</div><input id='attrs-40a19b7a-7d32-41c9-8ed2-52c45c177ccb' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-40a19b7a-7d32-41c9-8ed2-52c45c177ccb' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-630506dd-a2c6-46bf-b96c-fbde3a90f66b' class='xr-var-data-in' type='checkbox'><label for='data-630506dd-a2c6-46bf-b96c-fbde3a90f66b' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>flag_values :</span></dt><dd>[1 2 3 4 9]</dd><dt><span>flag_meanings :</span></dt><dd>pass not_evaluated suspect_or_of_high_interest fail missing_data</dd><dt><span>standard_name :</span></dt><dd>sea_water_electrical_conductivity status_flag</dd><dt><span>long_name :</span></dt><dd>Seawater Conductivity QARTOD Summary Flag</dd><dt><span>references :</span></dt><dd>https://ioos.noaa.gov/project/qartod https://github.com/ioos/ioos_qc</dd><dt><span>comment :</span></dt><dd>Summary QARTOD test flags. For each datum, the flag is set to the most significant result of all QARTOD tests run for that datum.</dd><dt><span>alternate_parameter_name :</span></dt><dd>conductivity_qartod_results</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([1., 1., 1., ..., 1., 1., 1.], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_pressure_qc_executed</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>29.0 29.0 29.0 ... 29.0 29.0 29.0</div><input id='attrs-558147e4-cf1a-4159-8edb-ce537c9d7d07' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-558147e4-cf1a-4159-8edb-ce537c9d7d07' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-95029474-c4cb-4742-93ec-fcfb24d9bec9' class='xr-var-data-in' type='checkbox'><label for='data-95029474-c4cb-4742-93ec-fcfb24d9bec9' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>alternate_parameter_name :</span></dt><dd>pressure_qc_executed</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([29., 29., 29., ..., 29., 29., 29.], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_practical_salinity_qc_executed</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>29.0 29.0 29.0 ... 29.0 29.0 29.0</div><input id='attrs-cbb31fdf-3391-445c-807f-48abe1cf23c2' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-cbb31fdf-3391-445c-807f-48abe1cf23c2' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-c62e4fab-11be-4e05-9925-dd9a3d4eb61e' class='xr-var-data-in' type='checkbox'><label for='data-c62e4fab-11be-4e05-9925-dd9a3d4eb61e' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>alternate_parameter_name :</span></dt><dd>practical_salinity_qc_executed</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([29., 29., 29., ..., 29., 29., 29.], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>driver_timestamp</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>datetime64[ns]</div><div class='xr-var-preview xr-preview'>2021-06-14T04:18:38.901251584 .....</div><input id='attrs-b4934cd8-4e96-47ca-83b1-562b8122cf10' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-b4934cd8-4e96-47ca-83b1-562b8122cf10' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-d5b0fb07-7880-4d71-93cb-81908104f05b' class='xr-var-data-in' type='checkbox'><label for='data-d5b0fb07-7880-4d71-93cb-81908104f05b' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>comment :</span></dt><dd>Driver timestamp, UTC</dd><dt><span>long_name :</span></dt><dd>Driver Timestamp, UTC</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([&#x27;2021-06-14T04:18:38.901251584&#x27;, &#x27;2021-06-14T04:18:38.901386240&#x27;,
+       &#x27;2021-06-14T04:18:38.901453824&#x27;, ...,
+       &#x27;2021-06-14T04:18:43.346608128&#x27;, &#x27;2021-06-14T04:18:43.346666496&#x27;,
+       &#x27;2021-06-14T04:18:43.346723840&#x27;], dtype=&#x27;datetime64[ns]&#x27;)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>id</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>|S64</div><div class='xr-var-preview xr-preview'>b&#x27;e7b5e3db-a2dc-4ed1-9c0f-b421c4...</div><input id='attrs-ebe66c83-9138-4503-a574-693f659a0396' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-ebe66c83-9138-4503-a574-693f659a0396' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-5422f841-441d-4c4b-afd6-e10db7ce82f5' class='xr-var-data-in' type='checkbox'><label for='data-5422f841-441d-4c4b-afd6-e10db7ce82f5' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>name :</span></dt><dd>id</dd><dt><span>_ChunkSizes :</span></dt><dd>[2224   36]</dd></dl></div><div class='xr-var-data'><pre>array([b&#x27;e7b5e3db-a2dc-4ed1-9c0f-b421c4e37aed&#x27;,
+       b&#x27;165c0466-e64e-4af2-bbac-652d843c3305&#x27;,
+       b&#x27;571a7521-dec4-4b7d-95f7-3bf5dce1e319&#x27;, ...,
+       b&#x27;2978db53-cf64-474a-8c79-a7f834c0c31c&#x27;,
+       b&#x27;69832279-7981-401b-84c4-7306eefba324&#x27;,
+       b&#x27;9c0422b5-a572-4199-9d7a-3cf64831768b&#x27;], dtype=&#x27;|S64&#x27;)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_temperature_qartod_results</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>1.0 1.0 1.0 1.0 ... 1.0 1.0 1.0 1.0</div><input id='attrs-f58aaa10-0d63-45f2-ad14-f117ea93230d' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-f58aaa10-0d63-45f2-ad14-f117ea93230d' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-3f710618-022d-4c9f-bf57-3b1af4227756' class='xr-var-data-in' type='checkbox'><label for='data-3f710618-022d-4c9f-bf57-3b1af4227756' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>flag_values :</span></dt><dd>[1 2 3 4 9]</dd><dt><span>flag_meanings :</span></dt><dd>pass not_evaluated suspect_or_of_high_interest fail missing_data</dd><dt><span>standard_name :</span></dt><dd>sea_water_temperature status_flag</dd><dt><span>long_name :</span></dt><dd>Seawater Temperature QARTOD Summary Flag</dd><dt><span>references :</span></dt><dd>https://ioos.noaa.gov/project/qartod https://github.com/ioos/ioos_qc</dd><dt><span>comment :</span></dt><dd>Summary QARTOD test flags. For each datum, the flag is set to the most significant result of all QARTOD tests run for that datum.</dd><dt><span>alternate_parameter_name :</span></dt><dd>temp_qartod_results</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([1., 1., 1., ..., 1., 1., 1.], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>provenance</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>|S64</div><div class='xr-var-preview xr-preview'>b&#x27;487aed0f-cbde-4ebf-99da-d8ed47...</div><input id='attrs-cfdcf43d-7369-48a2-a347-b82db986cd41' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-cfdcf43d-7369-48a2-a347-b82db986cd41' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-ac57a9ce-5e58-4766-9519-e320f68f97e2' class='xr-var-data-in' type='checkbox'><label for='data-ac57a9ce-5e58-4766-9519-e320f68f97e2' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>name :</span></dt><dd>provenance</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>_ChunkSizes :</span></dt><dd>[2224   36]</dd></dl></div><div class='xr-var-data'><pre>array([b&#x27;487aed0f-cbde-4ebf-99da-d8ed47d1d396&#x27;,
+       b&#x27;487aed0f-cbde-4ebf-99da-d8ed47d1d396&#x27;,
+       b&#x27;487aed0f-cbde-4ebf-99da-d8ed47d1d396&#x27;, ...,
+       b&#x27;520fa36d-eede-47c1-b221-eaadeee907bd&#x27;,
+       b&#x27;520fa36d-eede-47c1-b221-eaadeee907bd&#x27;,
+       b&#x27;520fa36d-eede-47c1-b221-eaadeee907bd&#x27;], dtype=&#x27;|S64&#x27;)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>ingestion_timestamp</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>datetime64[ns]</div><div class='xr-var-preview xr-preview'>2021-06-14T04:18:38.928999936 .....</div><input id='attrs-6c8a6459-15b4-45e2-a007-2e7dc98a0404' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-6c8a6459-15b4-45e2-a007-2e7dc98a0404' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-739be0dc-822a-4630-b42f-1df26dce942a' class='xr-var-data-in' type='checkbox'><label for='data-739be0dc-822a-4630-b42f-1df26dce942a' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>comment :</span></dt><dd>The NTP Timestamp for when the granule was ingested</dd><dt><span>long_name :</span></dt><dd>Ingestion Timestamp, UTC</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([&#x27;2021-06-14T04:18:38.928999936&#x27;, &#x27;2021-06-14T04:18:38.930000384&#x27;,
+       &#x27;2021-06-14T04:18:38.930000384&#x27;, ...,
+       &#x27;2021-06-14T04:18:43.371000320&#x27;, &#x27;2021-06-14T04:18:43.371999744&#x27;,
+       &#x27;2021-06-14T04:18:43.373000192&#x27;], dtype=&#x27;datetime64[ns]&#x27;)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>internal_timestamp</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>datetime64[ns]</div><div class='xr-var-preview xr-preview'>2019-04-20T03:31:03 ... 2019-10-...</div><input id='attrs-62372eda-124f-40c8-aec8-2b7d45552818' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-62372eda-124f-40c8-aec8-2b7d45552818' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-5a40fdaf-911d-48e2-8c01-4895e010857e' class='xr-var-data-in' type='checkbox'><label for='data-5a40fdaf-911d-48e2-8c01-4895e010857e' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>comment :</span></dt><dd>Internal timestamp, UTC</dd><dt><span>long_name :</span></dt><dd>Internal Timestamp, UTC</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([&#x27;2019-04-20T03:31:03.000000000&#x27;, &#x27;2019-04-20T04:31:04.000000000&#x27;,
+       &#x27;2019-04-20T06:30:01.000000000&#x27;, ...,
+       &#x27;2019-10-22T20:30:01.000000000&#x27;, &#x27;2019-10-22T22:30:01.000000000&#x27;,
+       &#x27;2019-10-22T23:30:01.000000000&#x27;], dtype=&#x27;datetime64[ns]&#x27;)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_electrical_conductivity_qc_executed</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>29.0 29.0 29.0 ... 29.0 29.0 29.0</div><input id='attrs-7a8281c7-37e4-4692-a8df-f82c35b62b13' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-7a8281c7-37e4-4692-a8df-f82c35b62b13' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-5359cc0d-9ac4-4f9d-b535-b9b2c99d13fe' class='xr-var-data-in' type='checkbox'><label for='data-5359cc0d-9ac4-4f9d-b535-b9b2c99d13fe' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>alternate_parameter_name :</span></dt><dd>conductivity_qc_executed</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([29., 29., 29., ..., 29., 29., 29.], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_density_qc_results</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>5.0 5.0 5.0 5.0 ... 13.0 13.0 13.0</div><input id='attrs-dcc7ff77-3945-4b2a-abb3-2d7d6bff4077' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-dcc7ff77-3945-4b2a-abb3-2d7d6bff4077' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-0c734e2c-be4d-4d89-839c-6e850deb4d94' class='xr-var-data-in' type='checkbox'><label for='data-0c734e2c-be4d-4d89-839c-6e850deb4d94' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>alternate_parameter_name :</span></dt><dd>density_qc_results</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([ 5.,  5.,  5., ..., 13., 13., 13.], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_temperature_qc_results</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>13.0 13.0 13.0 ... 13.0 13.0 13.0</div><input id='attrs-9296dcbd-d377-4ac5-98fb-dc35ea9f6117' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-9296dcbd-d377-4ac5-98fb-dc35ea9f6117' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-1e7651a5-15a7-42bb-97d7-040854fb2f3d' class='xr-var-data-in' type='checkbox'><label for='data-1e7651a5-15a7-42bb-97d7-040854fb2f3d' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>alternate_parameter_name :</span></dt><dd>temp_qc_results</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([13., 13., 13., ..., 13., 13., 13.], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_pressure_qartod_executed</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>|S64</div><div class='xr-var-preview xr-preview'>b&#x27;1&#x27; b&#x27;1&#x27; b&#x27;1&#x27; ... b&#x27;1&#x27; b&#x27;1&#x27; b&#x27;1&#x27;</div><input id='attrs-686bb242-8d19-4dbb-a80d-3d82e513db67' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-686bb242-8d19-4dbb-a80d-3d82e513db67' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-ed9de8aa-7762-4b50-b918-540380a9d85b' class='xr-var-data-in' type='checkbox'><label for='data-ed9de8aa-7762-4b50-b918-540380a9d85b' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>tests_executed :</span></dt><dd>gross_range_test</dd><dt><span>standard_name :</span></dt><dd>sea_water_pressure status_flag</dd><dt><span>long_name :</span></dt><dd>Seawater Pressure Individual QARTOD Flags</dd><dt><span>references :</span></dt><dd>https://ioos.noaa.gov/project/qartod https://github.com/ioos/ioos_qc</dd><dt><span>comment :</span></dt><dd>Individual QARTOD test flags. For each datum, flags are listed in a string matching the order of the tests_executed attribute. Flags should be interpreted using the standard QARTOD mapping: [1: pass, 2: not_evaluated, 3: suspect_or_of_high_interest, 4: fail, 9: missing_data].</dd><dt><span>alternate_parameter_name :</span></dt><dd>pressure_qartod_executed</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>_ChunkSizes :</span></dt><dd>445</dd></dl></div><div class='xr-var-data'><pre>array([b&#x27;1&#x27;, b&#x27;1&#x27;, b&#x27;1&#x27;, ..., b&#x27;1&#x27;, b&#x27;1&#x27;, b&#x27;1&#x27;], dtype=&#x27;|S64&#x27;)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>date_time_string</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>object</div><div class='xr-var-preview xr-preview'>b&#x27;empty&#x27; b&#x27;empty&#x27; ... b&#x27;empty&#x27;</div><input id='attrs-fe89b662-bd49-4014-ab3a-37591a996440' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-fe89b662-bd49-4014-ab3a-37591a996440' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-3b3a6e00-2a0f-4566-ade1-82c09ac76f01' class='xr-var-data-in' type='checkbox'><label for='data-3b3a6e00-2a0f-4566-ade1-82c09ac76f01' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>comment :</span></dt><dd>A date and time string produced for each sample record.</dd><dt><span>precision :</span></dt><dd>0</dd><dt><span>long_name :</span></dt><dd>Date and Time String</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>_ChunkSizes :</span></dt><dd>[2224    5]</dd></dl></div><div class='xr-var-data'><pre>array([b&#x27;empty&#x27;, b&#x27;empty&#x27;, b&#x27;empty&#x27;, ..., b&#x27;empty&#x27;, b&#x27;empty&#x27;, b&#x27;empty&#x27;],
+      dtype=object)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>port_timestamp</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>datetime64[ns]</div><div class='xr-var-preview xr-preview'>2019-04-20T03:31:09.482999808 .....</div><input id='attrs-b95f4222-36a6-4b35-a05d-c069cf761451' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-b95f4222-36a6-4b35-a05d-c069cf761451' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-03a7640d-2768-4968-bbc6-f13285cf3eb5' class='xr-var-data-in' type='checkbox'><label for='data-03a7640d-2768-4968-bbc6-f13285cf3eb5' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>comment :</span></dt><dd>Port timestamp, UTC</dd><dt><span>long_name :</span></dt><dd>Port Timestamp, UTC</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([&#x27;2019-04-20T03:31:09.482999808&#x27;, &#x27;2019-04-20T04:31:11.066999808&#x27;,
+       &#x27;2019-04-20T06:30:07.310000128&#x27;, ...,
+       &#x27;2019-10-22T20:30:15.685000192&#x27;, &#x27;2019-10-22T22:30:15.688999936&#x27;,
+       &#x27;2019-10-22T23:30:15.689999872&#x27;], dtype=&#x27;datetime64[ns]&#x27;)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_practical_salinity</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>30.54 30.78 30.84 ... 31.88 31.87</div><input id='attrs-2368d98c-19bc-4e2a-a1f7-58b881b786c6' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-2368d98c-19bc-4e2a-a1f7-58b881b786c6' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-db5926df-0885-48b7-80dc-d07c837f9d7a' class='xr-var-data-in' type='checkbox'><label for='data-db5926df-0885-48b7-80dc-d07c837f9d7a' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>comment :</span></dt><dd>Salinity is generally defined as the concentration of dissolved salt in a parcel of seawater. Practical Salinity is a more specific unitless quantity calculated from the conductivity of seawater and adjusted for temperature and pressure. It is approximately equivalent to Absolute Salinity (the mass fraction of dissolved salt in seawater) but they are not interchangeable.</dd><dt><span>long_name :</span></dt><dd>Practical Salinity</dd><dt><span>precision :</span></dt><dd>4</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>data_product_identifier :</span></dt><dd>PRACSAL_L2</dd><dt><span>standard_name :</span></dt><dd>sea_water_practical_salinity</dd><dt><span>units :</span></dt><dd>1</dd><dt><span>ancillary_variables :</span></dt><dd>practical_salinity_qartod_results practical_salinity_qartod_executed sea_water_pressure sea_water_electrical_conductivity sea_water_temperature</dd><dt><span>alternate_parameter_name :</span></dt><dd>practical_salinity</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([30.53877075, 30.77867624, 30.83860327, ..., 31.88006574,
+       31.88210419, 31.87395686])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_density_qc_executed</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>29.0 29.0 29.0 ... 29.0 29.0 29.0</div><input id='attrs-d80e7368-7d1a-4d60-b02b-d0ba45f9a026' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-d80e7368-7d1a-4d60-b02b-d0ba45f9a026' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-c15928cc-f8ef-4075-8e60-ef46bbc2f72c' class='xr-var-data-in' type='checkbox'><label for='data-c15928cc-f8ef-4075-8e60-ef46bbc2f72c' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>alternate_parameter_name :</span></dt><dd>density_qc_executed</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([29., 29., 29., ..., 29., 29., 29.], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_temperature_qartod_executed</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>|S64</div><div class='xr-var-preview xr-preview'>b&#x27;11&#x27; b&#x27;11&#x27; b&#x27;11&#x27; ... b&#x27;11&#x27; b&#x27;11&#x27;</div><input id='attrs-db0ec257-e5b5-46df-bee3-157558d8ea1b' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-db0ec257-e5b5-46df-bee3-157558d8ea1b' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-d077fe70-d2e1-4aff-8582-f50a55f35726' class='xr-var-data-in' type='checkbox'><label for='data-d077fe70-d2e1-4aff-8582-f50a55f35726' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>comment :</span></dt><dd>Individual QARTOD test flags. For each datum, flags are listed in a string matching the order of the tests_executed attribute. Flags should be interpreted using the standard QARTOD mapping: [1: pass, 2: not_evaluated, 3: suspect_or_of_high_interest, 4: fail, 9: missing_data].</dd><dt><span>alternate_parameter_name :</span></dt><dd>temp_qartod_executed</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>references :</span></dt><dd>https://ioos.noaa.gov/project/qartod https://github.com/ioos/ioos_qc</dd><dt><span>tests_executed :</span></dt><dd>gross_range_test, climatology_test</dd><dt><span>standard_name :</span></dt><dd>sea_water_temperature status_flag</dd><dt><span>long_name :</span></dt><dd>Seawater Temperature Individual QARTOD Flags</dd><dt><span>_ChunkSizes :</span></dt><dd>445</dd></dl></div><div class='xr-var-data'><pre>array([b&#x27;11&#x27;, b&#x27;11&#x27;, b&#x27;11&#x27;, ..., b&#x27;11&#x27;, b&#x27;11&#x27;, b&#x27;11&#x27;], dtype=&#x27;|S64&#x27;)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>deployment</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>int32</div><div class='xr-var-preview xr-preview'>11 11 11 11 11 ... 11 11 11 11 11</div><input id='attrs-299320e3-c3b2-4b95-ad07-b2356a8cadc8' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-299320e3-c3b2-4b95-ad07-b2356a8cadc8' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-6b23dd72-083e-4724-97ba-5afcb9aa5d69' class='xr-var-data-in' type='checkbox'><label for='data-6b23dd72-083e-4724-97ba-5afcb9aa5d69' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>name :</span></dt><dd>deployment</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([11, 11, 11, ..., 11, 11, 11])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_practical_salinity_qc_results</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>5.0 5.0 5.0 5.0 ... 13.0 13.0 13.0</div><input id='attrs-4f79631d-c65c-4485-a895-d906f60bd3f0' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-4f79631d-c65c-4485-a895-d906f60bd3f0' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-6d192271-5a78-4fbe-9910-586e364f407e' class='xr-var-data-in' type='checkbox'><label for='data-6d192271-5a78-4fbe-9910-586e364f407e' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>alternate_parameter_name :</span></dt><dd>practical_salinity_qc_results</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([ 5.,  5.,  5., ..., 13., 13., 13.], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_practical_salinity_qartod_results</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>1.0 1.0 1.0 1.0 ... 1.0 1.0 1.0 1.0</div><input id='attrs-90007bbf-522e-4787-a678-83a397136f00' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-90007bbf-522e-4787-a678-83a397136f00' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-b4574a84-673b-4475-bd9d-57b9fea49802' class='xr-var-data-in' type='checkbox'><label for='data-b4574a84-673b-4475-bd9d-57b9fea49802' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>flag_values :</span></dt><dd>[1 2 3 4 9]</dd><dt><span>flag_meanings :</span></dt><dd>pass not_evaluated suspect_or_of_high_interest fail missing_data</dd><dt><span>standard_name :</span></dt><dd>sea_water_practical_salinity status_flag</dd><dt><span>long_name :</span></dt><dd>Practical Salinity QARTOD Summary Flag</dd><dt><span>references :</span></dt><dd>https://ioos.noaa.gov/project/qartod https://github.com/ioos/ioos_qc</dd><dt><span>comment :</span></dt><dd>Summary QARTOD test flags. For each datum, the flag is set to the most significant result of all QARTOD tests run for that datum.</dd><dt><span>alternate_parameter_name :</span></dt><dd>practical_salinity_qartod_results</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([1., 1., 1., ..., 1., 1., 1.], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>preferred_timestamp</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>object</div><div class='xr-var-preview xr-preview'>b&#x27;port_timestamp&#x27; ... b&#x27;port_tim...</div><input id='attrs-38579fe0-cc38-40c8-b8f1-91a604f537a2' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-38579fe0-cc38-40c8-b8f1-91a604f537a2' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-a2ceb9dd-d902-4d30-8dda-2b5aabbdc88e' class='xr-var-data-in' type='checkbox'><label for='data-a2ceb9dd-d902-4d30-8dda-2b5aabbdc88e' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>Preferred Timestamp</dd><dt><span>comment :</span></dt><dd>Timestamp preferred as official record.</dd><dt><span>_ChunkSizes :</span></dt><dd>[2224   14]</dd></dl></div><div class='xr-var-data'><pre>array([b&#x27;port_timestamp&#x27;, b&#x27;port_timestamp&#x27;, b&#x27;port_timestamp&#x27;, ...,
+       b&#x27;port_timestamp&#x27;, b&#x27;port_timestamp&#x27;, b&#x27;port_timestamp&#x27;],
+      dtype=object)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_temperature</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>11.73 11.65 11.62 ... 13.01 13.07</div><input id='attrs-9befb916-14a5-4848-9f78-ebf7cf238f64' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-9befb916-14a5-4848-9f78-ebf7cf238f64' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-7be7653f-1445-4826-8236-df94a591958d' class='xr-var-data-in' type='checkbox'><label for='data-7be7653f-1445-4826-8236-df94a591958d' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>comment :</span></dt><dd>Seawater temperature near the sensor.</dd><dt><span>long_name :</span></dt><dd>Seawater Temperature</dd><dt><span>precision :</span></dt><dd>4</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>data_product_identifier :</span></dt><dd>TEMPWAT_L1</dd><dt><span>standard_name :</span></dt><dd>sea_water_temperature</dd><dt><span>units :</span></dt><dd>degrees_Celsius</dd><dt><span>ancillary_variables :</span></dt><dd>temp_qartod_results temp_qartod_executed</dd><dt><span>alternate_parameter_name :</span></dt><dd>temp</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([11.7274, 11.6453, 11.6207, ..., 13.0147, 13.0124, 13.0674],
+      dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_electrical_conductivity_qc_results</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>5.0 5.0 5.0 5.0 ... 13.0 13.0 13.0</div><input id='attrs-abe71e1e-2244-4eeb-938f-4b2eb761562e' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-abe71e1e-2244-4eeb-938f-4b2eb761562e' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-75f22153-cda1-4d7c-9879-ea5b5b558b70' class='xr-var-data-in' type='checkbox'><label for='data-75f22153-cda1-4d7c-9879-ea5b5b558b70' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>alternate_parameter_name :</span></dt><dd>conductivity_qc_results</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([ 5.,  5.,  5., ..., 13., 13., 13.], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_temperature_qc_executed</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>29.0 29.0 29.0 ... 29.0 29.0 29.0</div><input id='attrs-ed4db25c-40b5-471f-8745-ce89d92cb3a6' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-ed4db25c-40b5-471f-8745-ce89d92cb3a6' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-53170156-5141-4ac9-a6b3-7428c2705a71' class='xr-var-data-in' type='checkbox'><label for='data-53170156-5141-4ac9-a6b3-7428c2705a71' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>alternate_parameter_name :</span></dt><dd>temp_qc_executed</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([29., 29., 29., ..., 29., 29., 29.], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_density</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>1.023e+03 1.023e+03 ... 1.024e+03</div><input id='attrs-7a82c920-3290-44e0-89b4-695dcf4b5fc4' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-7a82c920-3290-44e0-89b4-695dcf4b5fc4' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-1c8918a2-9f49-4e57-9df4-8e0a67e926c4' class='xr-var-data-in' type='checkbox'><label for='data-1c8918a2-9f49-4e57-9df4-8e0a67e926c4' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>comment :</span></dt><dd>Seawater Density is defined as mass per unit volume and is calculated from the conductivity, temperature and depth of a seawater sample using the TEOS-10 equation.</dd><dt><span>long_name :</span></dt><dd>Seawater Density</dd><dt><span>precision :</span></dt><dd>3</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>data_product_identifier :</span></dt><dd>DENSITY_L2</dd><dt><span>standard_name :</span></dt><dd>sea_water_density</dd><dt><span>units :</span></dt><dd>kg m-3</dd><dt><span>alternate_parameter_name :</span></dt><dd>density</dd><dt><span>ancillary_variables :</span></dt><dd>sea_water_pressure sea_water_practical_salinity sea_water_temperature</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([1023.21400348, 1023.41415661, 1023.46585276, ..., 1024.01349624,
+       1024.0154094 , 1023.99941925])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>depth</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>7.269 7.105 7.276 ... 7.441 7.671</div><input id='attrs-b4f06ae4-e08c-4288-ba48-e3a2def0a1a5' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-b4f06ae4-e08c-4288-ba48-e3a2def0a1a5' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-38455528-3cc4-45bd-a937-dbef379b0065' class='xr-var-data-in' type='checkbox'><label for='data-38455528-3cc4-45bd-a937-dbef379b0065' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>comment :</span></dt><dd>Depth (m) calculated from pressure (dbar) and latitude.</dd><dt><span>precision :</span></dt><dd>3</dd><dt><span>long_name :</span></dt><dd>Depth calculated from pressure</dd><dt><span>units :</span></dt><dd>m</dd><dt><span>ancillary_variables :</span></dt><dd>sea_water_pressure</dd><dt><span>axis :</span></dt><dd>Z</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([7.26862734, 7.10496723, 7.27557058, ..., 7.46601084, 7.44121391,
+       7.67133035])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_pressure_qartod_results</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>1.0 1.0 1.0 1.0 ... 1.0 1.0 1.0 1.0</div><input id='attrs-bd496977-75e0-4df5-8706-d281ec6381d8' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-bd496977-75e0-4df5-8706-d281ec6381d8' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-fe670f07-da41-4b11-a826-4f2650a4f7bf' class='xr-var-data-in' type='checkbox'><label for='data-fe670f07-da41-4b11-a826-4f2650a4f7bf' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>flag_values :</span></dt><dd>[1 2 3 4 9]</dd><dt><span>flag_meanings :</span></dt><dd>pass not_evaluated suspect_or_of_high_interest fail missing_data</dd><dt><span>standard_name :</span></dt><dd>sea_water_pressure status_flag</dd><dt><span>long_name :</span></dt><dd>Seawater Pressure QARTOD Summary Flag</dd><dt><span>references :</span></dt><dd>https://ioos.noaa.gov/project/qartod https://github.com/ioos/ioos_qc</dd><dt><span>comment :</span></dt><dd>Summary QARTOD test flags. For each datum, the flag is set to the most significant result of all QARTOD tests run for that datum.</dd><dt><span>alternate_parameter_name :</span></dt><dd>pressure_qartod_results</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([1., 1., 1., ..., 1., 1., 1.], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_electrical_conductivity_qartod_executed</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>|S64</div><div class='xr-var-preview xr-preview'>b&#x27;1&#x27; b&#x27;1&#x27; b&#x27;1&#x27; ... b&#x27;1&#x27; b&#x27;1&#x27; b&#x27;1&#x27;</div><input id='attrs-159ddae5-a5ad-4028-ae8b-b8381a489ae7' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-159ddae5-a5ad-4028-ae8b-b8381a489ae7' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-c4361f73-3877-4952-9dc9-e2874862ff2c' class='xr-var-data-in' type='checkbox'><label for='data-c4361f73-3877-4952-9dc9-e2874862ff2c' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>comment :</span></dt><dd>Individual QARTOD test flags. For each datum, flags are listed in a string matching the order of the tests_executed attribute. Flags should be interpreted using the standard QARTOD mapping: [1: pass, 2: not_evaluated, 3: suspect_or_of_high_interest, 4: fail, 9: missing_data].</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>tests_executed :</span></dt><dd>gross_range_test</dd><dt><span>standard_name :</span></dt><dd>sea_water_electrical_conductivity status_flag</dd><dt><span>long_name :</span></dt><dd>Seawater Conductivity Individual QARTOD Flags</dd><dt><span>references :</span></dt><dd>https://ioos.noaa.gov/project/qartod https://github.com/ioos/ioos_qc</dd><dt><span>alternate_parameter_name :</span></dt><dd>conductivity_qartod_executed</dd><dt><span>_ChunkSizes :</span></dt><dd>445</dd></dl></div><div class='xr-var-data'><pre>array([b&#x27;1&#x27;, b&#x27;1&#x27;, b&#x27;1&#x27;, ..., b&#x27;1&#x27;, b&#x27;1&#x27;, b&#x27;1&#x27;], dtype=&#x27;|S64&#x27;)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_electrical_conductivity</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>3.516 3.534 3.538 ... 3.769 3.773</div><input id='attrs-ba0fbaca-5a64-4484-9f1a-d97526a2c878' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-ba0fbaca-5a64-4484-9f1a-d97526a2c878' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-e150e9a3-e053-44af-b574-a25ff014df4a' class='xr-var-data-in' type='checkbox'><label for='data-e150e9a3-e053-44af-b574-a25ff014df4a' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>comment :</span></dt><dd>Seawater conductivity refers to the ability of seawater to conduct electricity. The presence of ions in the seawater, such as salt, increases the electrical conducting ability of seawater. As such, conductivity can be used as a proxy for determining the quantity of salt in a sample of seawater.</dd><dt><span>long_name :</span></dt><dd>Seawater Conductivity</dd><dt><span>precision :</span></dt><dd>6</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>data_product_identifier :</span></dt><dd>CONDWAT_L1</dd><dt><span>standard_name :</span></dt><dd>sea_water_electrical_conductivity</dd><dt><span>units :</span></dt><dd>S m-1</dd><dt><span>ancillary_variables :</span></dt><dd>conductivity_qartod_results conductivity_qartod_executed</dd><dt><span>alternate_parameter_name :</span></dt><dd>conductivity</dd><dt><span>_ChunkSizes :</span></dt><dd>2224</dd></dl></div><div class='xr-var-data'><pre>array([3.51582, 3.53364, 3.53773, ..., 3.76903, 3.76904, 3.7731 ],
+      dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sea_water_practical_salinity_qartod_executed</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>|S64</div><div class='xr-var-preview xr-preview'>b&#x27;11&#x27; b&#x27;11&#x27; b&#x27;11&#x27; ... b&#x27;11&#x27; b&#x27;11&#x27;</div><input id='attrs-d5d85063-6d34-40cf-956e-905cd9fa2dcb' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-d5d85063-6d34-40cf-956e-905cd9fa2dcb' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-7010e19b-e2e9-4c92-9e0b-bc26a12c4db8' class='xr-var-data-in' type='checkbox'><label for='data-7010e19b-e2e9-4c92-9e0b-bc26a12c4db8' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>comment :</span></dt><dd>Individual QARTOD test flags. For each datum, flags are listed in a string matching the order of the tests_executed attribute. Flags should be interpreted using the standard QARTOD mapping: [1: pass, 2: not_evaluated, 3: suspect_or_of_high_interest, 4: fail, 9: missing_data].</dd><dt><span>tests_executed :</span></dt><dd>gross_range_test, climatology_test</dd><dt><span>standard_name :</span></dt><dd>sea_water_practical_salinity status_flag</dd><dt><span>long_name :</span></dt><dd>Practical Salinity Individual QARTOD Flags</dd><dt><span>references :</span></dt><dd>https://ioos.noaa.gov/project/qartod https://github.com/ioos/ioos_qc</dd><dt><span>alternate_parameter_name :</span></dt><dd>practical_salinity_qartod_executed</dd><dt><span>coordinates :</span></dt><dd>time lat lon depth</dd><dt><span>_ChunkSizes :</span></dt><dd>445</dd></dl></div><div class='xr-var-data'><pre>array([b&#x27;11&#x27;, b&#x27;11&#x27;, b&#x27;11&#x27;, ..., b&#x27;11&#x27;, b&#x27;11&#x27;, b&#x27;11&#x27;], dtype=&#x27;|S64&#x27;)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-5eccc975-b96d-409f-81eb-e76396115329' class='xr-section-summary-in' type='checkbox'  ><label for='section-5eccc975-b96d-409f-81eb-e76396115329' class='xr-section-summary' >Attributes: <span>(73)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'><dt><span>node :</span></dt><dd>RID16</dd><dt><span>comment :</span></dt><dd></dd><dt><span>publisher_email :</span></dt><dd></dd><dt><span>sourceUrl :</span></dt><dd>http://oceanobservatories.org/</dd><dt><span>collection_method :</span></dt><dd>recovered_host</dd><dt><span>stream :</span></dt><dd>ctdbp_cdef_dcl_instrument_recovered</dd><dt><span>featureType :</span></dt><dd>point</dd><dt><span>creator_email :</span></dt><dd></dd><dt><span>publisher_name :</span></dt><dd>Ocean Observatories Initiative</dd><dt><span>date_modified :</span></dt><dd>2022-09-12T21:24:13.693063</dd><dt><span>keywords :</span></dt><dd></dd><dt><span>cdm_data_type :</span></dt><dd>Point</dd><dt><span>references :</span></dt><dd>More information can be found at http://oceanobservatories.org/</dd><dt><span>Metadata_Conventions :</span></dt><dd>Unidata Dataset Discovery v1.0</dd><dt><span>date_created :</span></dt><dd>2022-09-12T21:24:13.693060</dd><dt><span>id :</span></dt><dd>CE01ISSM-RID16-03-CTDBPC000-recovered_host-ctdbp_cdef_dcl_instrument_recovered</dd><dt><span>requestUUID :</span></dt><dd>3982394a-7442-4f9c-9fe4-bbe14e115888</dd><dt><span>contributor_role :</span></dt><dd></dd><dt><span>summary :</span></dt><dd>Dataset Generated by Stream Engine from Ocean Observatories Initiative</dd><dt><span>keywords_vocabulary :</span></dt><dd></dd><dt><span>institution :</span></dt><dd>Ocean Observatories Initiative</dd><dt><span>naming_authority :</span></dt><dd>org.oceanobservatories</dd><dt><span>feature_Type :</span></dt><dd>point</dd><dt><span>infoUrl :</span></dt><dd>http://oceanobservatories.org/</dd><dt><span>license :</span></dt><dd></dd><dt><span>contributor_name :</span></dt><dd></dd><dt><span>uuid :</span></dt><dd>3982394a-7442-4f9c-9fe4-bbe14e115888</dd><dt><span>creator_name :</span></dt><dd>Ocean Observatories Initiative</dd><dt><span>title :</span></dt><dd>Data produced by Stream Engine version 1.20.1 for CE01ISSM-RID16-03-CTDBPC000-recovered_host-ctdbp_cdef_dcl_instrument_recovered</dd><dt><span>sensor :</span></dt><dd>03-CTDBPC000</dd><dt><span>standard_name_vocabulary :</span></dt><dd>NetCDF Climate and Forecast (CF) Metadata Convention Standard Name Table 29</dd><dt><span>acknowledgement :</span></dt><dd></dd><dt><span>Conventions :</span></dt><dd>CF-1.6</dd><dt><span>project :</span></dt><dd>Ocean Observatories Initiative</dd><dt><span>source :</span></dt><dd>CE01ISSM-RID16-03-CTDBPC000-recovered_host-ctdbp_cdef_dcl_instrument_recovered</dd><dt><span>publisher_url :</span></dt><dd>http://oceanobservatories.org/</dd><dt><span>creator_url :</span></dt><dd>http://oceanobservatories.org/</dd><dt><span>nodc_template_version :</span></dt><dd>NODC_NetCDF_TimeSeries_Orthogonal_Template_v1.1</dd><dt><span>subsite :</span></dt><dd>CE01ISSM</dd><dt><span>processing_level :</span></dt><dd>L2</dd><dt><span>history :</span></dt><dd>2022-09-12T21:24:13.693013 generated from Stream Engine</dd><dt><span>Manufacturer :</span></dt><dd>Sea-Bird Electronics</dd><dt><span>ModelNumber :</span></dt><dd>SBE 16plus V2</dd><dt><span>SerialNumber :</span></dt><dd>16-50009</dd><dt><span>Description :</span></dt><dd>CTD Pumped: CTDBP Series C</dd><dt><span>FirmwareVersion :</span></dt><dd>Not specified.</dd><dt><span>SoftwareVersion :</span></dt><dd>Not specified.</dd><dt><span>AssetUniqueID :</span></dt><dd>CGINS-CTDBPC-50009</dd><dt><span>Notes :</span></dt><dd>Not specified.</dd><dt><span>Owner :</span></dt><dd>Not specified.</dd><dt><span>RemoteResources :</span></dt><dd>[]</dd><dt><span>ShelfLifeExpirationDate :</span></dt><dd>Not specified.</dd><dt><span>Mobile :</span></dt><dd>False</dd><dt><span>AssetManagementRecordLastModified :</span></dt><dd>2022-09-02T13:10:20.226000</dd><dt><span>time_coverage_start :</span></dt><dd>2019-04-20T03:31:09.483000</dd><dt><span>time_coverage_end :</span></dt><dd>2019-10-22T23:30:15.690000</dd><dt><span>time_coverage_resolution :</span></dt><dd>P7219.40S</dd><dt><span>geospatial_lat_min :</span></dt><dd>44.65683</dd><dt><span>geospatial_lat_max :</span></dt><dd>44.65683</dd><dt><span>geospatial_lat_units :</span></dt><dd>degrees_north</dd><dt><span>geospatial_lat_resolution :</span></dt><dd>0.1</dd><dt><span>geospatial_lon_min :</span></dt><dd>-124.09533</dd><dt><span>geospatial_lon_max :</span></dt><dd>-124.09533</dd><dt><span>geospatial_lon_units :</span></dt><dd>degrees_east</dd><dt><span>geospatial_lon_resolution :</span></dt><dd>0.1</dd><dt><span>geospatial_vertical_units :</span></dt><dd>meters</dd><dt><span>geospatial_vertical_resolution :</span></dt><dd>0.1</dd><dt><span>geospatial_vertical_positive :</span></dt><dd>down</dd><dt><span>lat :</span></dt><dd>44.65683</dd><dt><span>lon :</span></dt><dd>-124.09533</dd><dt><span>DODS.strlen :</span></dt><dd>14</dd><dt><span>DODS.dimName :</span></dt><dd>string14</dd><dt><span>DODS_EXTRA.Unlimited_Dimension :</span></dt><dd>obs</dd></dl></div></li></ul></div></div></div></div>
+</div>
+<p>Note that now the coordinate <code class="docutils literal notranslate"><span class="pre">time</span></code> is in bold, as we have made it the dimension of our dataset. We should also rename the pressure, temperature, and conductivity data variables from their current form (e.g., ‘sea_water_temperature’) to something a little easier to work with, since we’ll be referencing them a lot.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ctd_ds</span> <span class="o">=</span> <span class="n">ctd_ds</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s1">&#39;sea_water_temperature&#39;</span><span class="p">:</span><span class="s1">&#39;temp&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;sea_water_electrical_conductivity&#39;</span><span class="p">:</span><span class="s1">&#39;cond&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;sea_water_pressure&#39;</span><span class="p">:</span><span class="s1">&#39;pres&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>That should be a little easier on the hands now! One final step before plotting. You may have noticed that I told you we will be plotting the sea surface <em>salinity</em> but so far only have data for sea surface <em>conductivity</em>. Conductivity is what the CTD measures, but to get to salinity we would need to do quite a bit of physics, chemistry, and maths. Fortunately, others have done this before us, so we only need to use their results. For this, we use the TEOS-10 Gibbs Sea Water package and calculate the practical salinity from the conductivity, temperature, and pressure and assign it to a new variable in our xarray.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gsw.conversions</span> <span class="k">as</span> <span class="nn">conv</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ctd_ds</span><span class="p">[</span><span class="s1">&#39;sal_p&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">SP_from_C</span><span class="p">(</span><span class="n">ctd_ds</span><span class="p">[</span><span class="s1">&#39;cond&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span><span class="p">,</span><span class="n">ctd_ds</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">],</span><span class="n">ctd_ds</span><span class="p">[</span><span class="s1">&#39;pres&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note the factor ten in the formula being multiplied by the conductivity. This is because the function expected units (mS/cm) different from that which is in the dataset (S/m). Check your units and, when you get weird, unexpected results, check them again!</p>
+<p>Now, we can finally make our plots, first importing the necessary module from the matplotlib package.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ctd_ds</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">],</span><span class="n">ctd_ds</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">])</span>
+<span class="c1">#the dollar signs around the oC allow Latex-style formatting in matplotlib labels</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Temperature [$2^3$]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;Temperature [$2^3$]&#39;)
+</pre></div>
+</div>
+<img alt="_images/8f67bbcea4ca07d842acf14bf905d9001d25a981b8d3d8206dd76107a6ef5473.png" src="_images/8f67bbcea4ca07d842acf14bf905d9001d25a981b8d3d8206dd76107a6ef5473.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ctd_ds</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">],</span><span class="n">ctd_ds</span><span class="p">[</span><span class="s1">&#39;sal_p&#39;</span><span class="p">])</span>
+<span class="c1">#the dollar signs around the PSU allow Latex-style formatting in matplotlib labels</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Practical Salinity [$PSU$]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;Practical Salinity [$PSU$]&#39;)
+</pre></div>
+</div>
+<img alt="_images/f6f14c7478affbd36ed0a00da3e954de4fddc847a8b8cd9d7371f8dc441f5a9a.png" src="_images/f6f14c7478affbd36ed0a00da3e954de4fddc847a8b8cd9d7371f8dc441f5a9a.png" />
+</div>
+</div>
+<p>There is so much more we could do with styling and customizing these plots that is outside the scope of this guide. If you want to add or change something in these plots, consider a Google search along the lines of ‘how to … matplotlib’ and I am sure someone else has solved this problem before.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ctd_ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;http://thredds.dataexplorer.oceanobservatories.org/thredds/dodsC/ooigoldcopy/public/CE01ISSM-RID16-03-CTDBPC000-recovered_host-ctdbp_cdef_dcl_instrument_recovered/deployment0011_CE01ISSM-RID16-03-CTDBPC000-recovered_host-ctdbp_cdef_dcl_instrument_recovered_20190420T033109.483000-20191022T233015.690000.nc&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Installing-and-Setting-Up-Python.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Installing Python and Required Packages</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contents">Contents:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accessing-ooi-data">Accessing OOI Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analyzing-ooi-data">Analyzing OOI Data</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Andrew Scherer
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
