@@ -436,11 +436,8 @@ document.write(`
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pandas</span> <span class="n">matplotlib</span> <span class="n">numpy</span> <span class="n">xarray</span><span class="p">[</span><span class="n">io</span><span class="p">]</span> <span class="n">scipy</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Note that copying all of your book’s build files into the same branch as your source files will cause your repository to become very large over time, especially if you have many images in your book. :::</p>
-<p>Note the optional [io] specifier, which installs xarray with its optional io packages and their dependencies. If you don’t include this, you’ll get an error message when you try to open netCDF files. See <a class="reference external" href="https://docs.xarray.dev/en/stable/getting-started-guide/installing.html#instructions">here</a> for more details. You may also be interested in installing the optional visualization or acceleration package dependencies for xarray, as well as the eccodes package which allows reading of <a class="reference external" href="https://confluence.ecmwf.int/display/CKB/What+are+GRIB+files+and+how+can+I+read+them">GRIB files</a>, which can be installed with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">xarray</span><span class="p">[</span><span class="n">viz</span><span class="p">]</span> <span class="n">xarray</span><span class="p">[</span><span class="n">accel</span><span class="p">]</span> <span class="n">eccodes</span>
+<p>Note the optional [io] specifier, which installs xarray with its optional io packages and their dependencies. If you don’t include this, you’ll get an error message when you try to open netCDF files. See <a class="reference external" href="https://docs.xarray.dev/en/stable/getting-started-guide/installing.html#instructions">here</a> for more details. You may also be interested in installing the optional visualization or acceleration package dependencies for xarray, which can be installed with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">xarray</span><span class="p">[</span><span class="n">viz</span><span class="p">]</span> <span class="n">xarray</span><span class="p">[</span><span class="n">accel</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>Finally, we install some oceanographic-specific packages to help with some calculations, analysis, and presentation: <a class="reference external" href="https://pypi.org/project/pycoare/">pycoare</a> (calculates wind stress among other things), <a class="reference external" href="https://matplotlib.org/cmocean/">cmocean</a> (colormaps for plotting oceanographic data), and <a class="reference external" href="https://teos-10.github.io/GSW-Python/">GSW</a> (TEOS-10 Gibbs Sea Water - equation of state):</p>
@@ -448,7 +445,6 @@ document.write(`
 </pre></div>
 </div>
 <p>There are, of course, plenty more packages designed for oceanographic data analysis, many of which can be found at <a class="reference external" href="https://pyoceans.github.io/sea-py/">SEA-PY</a>.</p>
-</div>
 </section>
 <section id="wrapping-up-and-testing">
 <h2>Wrapping Up and Testing<a class="headerlink" href="#wrapping-up-and-testing" title="Permalink to this heading">#</a></h2>

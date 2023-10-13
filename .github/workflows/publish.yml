@@ -30,6 +30,7 @@ jobs:
     # Build the book
     - name: Build the book
       run: |
+        jupyter-book clean src/ --all
         jupyter-book build src/
 
     # Push the book's HTML to github-pages
