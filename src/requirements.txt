@@ -2,3 +2,4 @@ xarray[io]
 gsw
 matplotlib
 jupyter-book
+eccodes
