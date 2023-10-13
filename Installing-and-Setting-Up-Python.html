@@ -389,7 +389,7 @@ document.write(`
 <h2>Installing Anaconda<a class="headerlink" href="#installing-anaconda" title="Permalink to this heading">#</a></h2>
 <p>This is likely the easiest step in the notebook. Simply naviagte to <a class="reference external" href="https://www.anaconda.com/products/distribution">the Anaconda website</a> to download their latest distribution of Python, packaged with everything you will need. Use the default installation settings.</p>
 <p>Once Anaconda is installed, you can check to make sure things worked correctly by opening “Anaconda Prompt” (a program found under the “Home” tab in the Anaconda Navigator or by searching directly on your machine). After opening Anaconda, enter the following command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">Python</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">python</span>
 </pre></div>
 </div>
 <p>This should output:</p>
@@ -422,41 +422,42 @@ document.write(`
 </section>
 <section id="installing-required-packages">
 <h2>Installing Required Packages<a class="headerlink" href="#installing-required-packages" title="Permalink to this heading">#</a></h2>
-<p>First we will install our IDE, JupyterLab. Note that specific version numbers of packages can be chosen, but that will be skipped here.</p>
+<p>First we will install our IDE, JupyterLab:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">jupyterlab</span>
 </pre></div>
 </div>
 <p>Enter <code class="docutils literal notranslate"><span class="pre">y</span></code> whenever prompted to install the package and its dependencies. You should see a whole bunch of other packages pop up when you are installing jupyterlab. These are the packages <em>dependencies</em>, i.e., the other packages required for the package we want to work. Dependencies can get messy, fast, and keeping them separate and organized is one of the primary reasons we use environments in the first place.</p>
 <p>Next, we install the rest of our packages. I group them into batches so you can begin to understand what each package is for (documentation is generally good and vast amounts of information on each can be found at the project sites linked here), although this grouping is not required and they could all be installed in a couple lines.</p>
-<p>First, we install some packages used for accessing data on the web: <a class="reference external" href="https://pypi.org/project/requests/">requests</a> (HTTP requesting), <a class="reference external" href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">Beautiful Soup</a> (for scraping HTML on websites), and <a class="reference external" href="https://unidata.github.io/netcdf4-python/">netCDF4</a> (an interface necessary to read netCDF files).</p>
+<p>First, we install some packages used for accessing data on the web: <a class="reference external" href="https://pypi.org/project/requests/">requests</a> (HTTP requesting), <a class="reference external" href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">Beautiful Soup</a> (for scraping HTML on websites), and <a class="reference external" href="https://unidata.github.io/netcdf4-python/">netCDF4</a> (an interface necessary to read netCDF files):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">conda</span> <span class="n">install</span> <span class="n">requests</span> <span class="n">bs4</span> <span class="n">netcdf4</span>
 </pre></div>
 </div>
-<p>Next, we will install basic scientific computation resources like <a class="reference external" href="https://numpy.org/">Numpy</a> (working with arrays), <a class="reference external" href="https://scipy.org/">Scipy</a> (interpolation, linear algebra, numerical integration), <a class="reference external" href="https://pandas.pydata.org/">Pandas</a> (data structures for working with tables, works well with xarray), <a class="reference external" href="https://docs.xarray.dev/en/stable/">Xarray</a> (designed for handling multi-dimensional arrays and NetCDF files, the dominant file type for oceanographic data), and <a class="reference external" href="https://matplotlib.org/">Matplotlib</a> (plotting).</p>
+<p>Next, we will install basic scientific computation resources like <a class="reference external" href="https://numpy.org/">Numpy</a> (working with arrays), <a class="reference external" href="https://scipy.org/">Scipy</a> (interpolation, linear algebra, numerical integration), <a class="reference external" href="https://pandas.pydata.org/">Pandas</a> (data structures for working with tables, works well with xarray), <a class="reference external" href="https://docs.xarray.dev/en/stable/">Xarray</a> (designed for handling multi-dimensional arrays and NetCDF files, the dominant file type for oceanographic data), and <a class="reference external" href="https://matplotlib.org/">Matplotlib</a> (plotting):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pandas</span> <span class="n">matplotlib</span> <span class="n">numpy</span> <span class="n">xarray</span> <span class="n">scipy</span>
 </pre></div>
 </div>
-<p>Finally, we install some oceanographic-specific packages to help with some calculations, analysis, and presentation: <a class="reference external" href="https://github.com/pyoceans/python-airsea">pycoare</a> (calculates wind stress among other things), <a class="reference external" href="https://matplotlib.org/cmocean/">cmocean</a> (colormaps for plotting oceanographic data), and <a class="reference external" href="https://teos-10.github.io/GSW-Python/">GSW</a> (TEOS-10 Gibbs Sea Water - equations of state for seawater).</p>
+<p>Finally, we install some oceanographic-specific packages to help with some calculations, analysis, and presentation: <a class="reference external" href="https://coare-live.readthedocs.io/en/latest/?badge=latest">pycoare</a> (calculates wind stress among other things), <a class="reference external" href="https://matplotlib.org/cmocean/">cmocean</a> (colormaps for plotting oceanographic data), and <a class="reference external" href="https://teos-10.github.io/GSW-Python/">GSW</a> (TEOS-10 Gibbs Sea Water - equations of state for seawater):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">cmocean</span> <span class="n">gsw</span> <span class="n">pycoare</span>
 </pre></div>
 </div>
+<p>There are, of course, plenty more packages designed for oceanographic data analysis, many of which can be found at <a class="reference external" href="https://pyoceans.github.io/sea-py/">SEA-PY</a>.</p>
 </section>
 <section id="wrapping-up-and-testing">
 <h2>Wrapping Up and Testing<a class="headerlink" href="#wrapping-up-and-testing" title="Permalink to this heading">#</a></h2>
-<p>You should now be able to open an Anaconda Prompt, activate your new environment with</p>
+<p>You should now be able to open an Anaconda Prompt, activate your new environment:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">conda</span> <span class="n">deactivate</span>
 <span class="o">&gt;</span> <span class="n">conda</span> <span class="n">activate</span> <span class="n">env_name</span>
 </pre></div>
 </div>
-<p>navigate to the directory of your soon-to-be project with</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">cd</span> <span class="n">C</span><span class="p">:</span>\<span class="n">your_path_here</span>
+<p>Create a folder on your desktop titled <code class="docutils literal notranslate"><span class="pre">OOI_data_analysis</span></code> and navigate to the directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">cd</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">your_username_here</span>\<span class="n">Desktop</span>\<span class="n">OOI_data_analysis</span>
 </pre></div>
 </div>
-<p>then run your Jupyter Lab IDE with</p>
+<p>Start the Jupyter Lab IDE:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">jupyter</span> <span class="n">lab</span>
 </pre></div>
 </div>
-<p>You should now see a browser open with the Jupyter Lab IDE and all the packages ready to go. However, we’re not quite done yet. To actually use our installed packages, we have to import them into each project. Open a new notebook and, in the first cell, paste the code:</p>
+<p>You should now see a browser open with the Jupyter Lab IDE and all the packages ready to go. However, we’re not quite done yet. To actually use our installed packages, we have to import them into each project. Open a new notebook and, in the first cell, paste and run the code:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span><span class="o">,</span> <span class="nn">bs4</span><span class="o">,</span> <span class="nn">numpy</span><span class="o">,</span> <span class="nn">scipy</span><span class="o">,</span> <span class="nn">pandas</span><span class="o">,</span> <span class="nn">xarray</span><span class="o">,</span> <span class="nn">matplotlib</span><span class="o">,</span> <span class="nn">pycoare</span><span class="o">,</span> <span class="nn">cmocean</span><span class="o">,</span> <span class="nn">gsw</span>
 </pre></div>
 </div>
